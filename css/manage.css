@@ -55,7 +55,7 @@ body {
 }
 
 .weui-panel {
-    background-color: #fff;
+    background-color: var(--weui-BG-5);
     margin-top: 10px;
     position: relative;
     overflow: visible;
@@ -111,7 +111,7 @@ body {
     right: 20px;
     top: 50%;
     transform: translate(0, -50%);
-    color: #333;
+    color: var(--weui-FG-1);
     display: block;
     width: 20px;
     height: 20px;
