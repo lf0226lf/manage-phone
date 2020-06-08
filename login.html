@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ch">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+	<title>首页</title>
+	<link rel="stylesheet" href="css/weui.css">
+	<link rel="stylesheet" href="css/common.css">
+	<link rel="stylesheet" href="//at.alicdn.com/t/font_1850030_8mjq6fkswqc.css">
+	<link rel="stylesheet" href="css/manage.css">
+</head>
+
+<body ontouchstart>
+	<div class="container" id="container">
+		<div class="page form_page js_show">
+			<form action="#" method="post" onsubmit="return false" class="weui-form p-t-lg">
+				<div class="weui-form__text-area">
+					<h2 class="weui-form__title">用户登录</h2>
+				</div>
+				<div class="weui-form__control-area">
+					<div class="weui-cells__group weui-cells__group_form">
+						<div class="weui-cells weui-cells_form">
+							<div class="weui-cell weui-cell_active">
+								<div class="weui-cell__hd"><label class="weui-label">用户名</label></div>
+								<div class="weui-cell__bd">
+									<input id="userName" class="weui-input" placeholder="填写用户名">
+								</div>
+							</div>
+							<div class="weui-cell weui-cell_active">
+								<div class="weui-cell__hd"><label class="weui-label">密码</label></div>
+								<div class="weui-cell__bd">
+									<input type="password" id="password" class="weui-input" placeholder="填写密码">
+								</div>
+							</div>
+							<!--
+                            <div class="weui-cell weui-cell_active weui-cell_vcode">
+                                <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
+                                <div class="weui-cell__bd">
+                                    <input id="js_input" class="weui-input" placeholder="填写验证码" type="number" pattern="[0-9]*">
+                                </div>
+                                <div class="weui-cell__ft">
+                                    <img src="" alt="" style="width: 104px;height: 32px;display: block;">
+                                </div>
+                            </div>
+-->
+						</div>
+					</div>
+				</div>
+				<div class="weui-form__tips-area">
+					<p class="weui-form__tips" id="login-tips">
+						<!--                        表单页提示，居中对齐-->
+					</p>
+				</div>
+				<div class="weui-form__opr-area">
+					<a class="weui-btn weui-btn_primary" href="javascript:" id="login">登 录</a>
+				</div>
+				<div class="weui-form__extra-area">
+					<div class="weui-footer">
+						<!--
+                        <p class="weui-footer__links">
+                            <a href="javascript:" class="weui-footer__link">底部链接文本</a>
+                        </p>
+-->
+						<p class="weui-footer__text">Copyright © 2020 STARRTSKY</p>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="weui-toptips weui-toptips_warn" id="topTips">错误提示</div>
+</body></html>
+
+
+<script src="js/jQuery-2.2.0.min.js"></script>
+<script src="js/weui.min.js"></script>
+<script src="https://g.alicdn.com/dingding/dingtalk-jsapi/2.7.13/dingtalk.open.js"></script>
+<script src="js/cookie.js"></script>
+<script src="js/common.js"></script>
+<script>
+//$(function () {
+//		dd.runtime.permission.requestAuthCode({
+//			corpId: corpId,
+//			onSuccess: function (result) {
+//				var code = result.code;
+//				$.ajax({
+//					type: "GET",
+//					url: 'http://139.224.229.86/templete/phone/phoneDdLogin?code=' + code,
+//					//                async: false,
+//					//                data: {
+//					//                    code: code
+//					//                },
+//					success: function (data) {
+//						if (data.resultCode == '0') {
+//							window.location.href = 'toMain';
+//						} else {
+//							$("#ddUserId").val(data.resultData);
+//						}
+//					}
+//				});
+//			},
+//			onFail: function (err) {
+//	
+//			}
+//		})
+//}
+$('#login').click(function () {
+	var userName = $("#userName").val(); //取前台用户名的值  
+	var password = $("#password").val(); //取前台密码的值
+	if (userName == "" && password == "") {
+		$('#login-tips').html('用户名或密码不能为空');
+	} else {
+		$.ajax({
+			//			,
+			url: apiUrl+'phoneLogin',
+			type: 'POST',
+			data: {
+				userLoginName: userName,
+				userPwd: password
+			},
+			success: function (result) {
+				console.log(result);
+				if (result.resultCode != '0') {
+					$('#login-tips').html(result.resultMsg);
+//					$('#topTips').html(result.resultMsg).fadeIn(200).delay(1500).fadeOut(200);
+				} else {
+					setCookie('ddid', '1248424434749904', 0.02083, '/');
+					//				var x = document.cookie;
+					//				console.log(x);
+					$(window).attr('location', 'home.html');
+				}
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+			}
+		});
+	}
+});
+	
+</script>

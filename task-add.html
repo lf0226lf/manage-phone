@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ch">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <title>首页</title>
+    <link rel="stylesheet" href="css/weui.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1850030_8mjq6fkswqc.css">
+    <link rel="stylesheet" href="css/manage.css">
+</head>
+
+<body ontouchstart>
+    <div class="container" id="container">
+        <div class="page form_page js_show">
+            <div class="weui-form">
+                <div class="weui-form__control-area">
+                    <div class="weui-cells__group weui-cells__group_form">
+                        <div class="weui-cells__title">基本信息</div>
+                        <div class="weui-cells weui-cells_form">
+                            <div class="weui-cell weui-cell_active">
+                                <div class="weui-cell__hd">发起时间</div>
+                                <div class="weui-cell__bd">
+                                    <input class="weui-input" type="datetime-local">
+                                </div>
+                            </div>
+                            <div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
+                                <div class="weui-cell__hd">
+                                    <label for="" class="weui-label">处理人</label>
+                                </div>
+                                <div class="weui-cell__bd">
+                                    <select class="weui-select" name="select2">
+                                        <option value="1">赵娴</option>
+                                        <option value="2">章炎</option>
+                                        <option value="3">赵炎</option>
+                                        <option value="4">刘飞</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weui-cells__group weui-cells__group_form">
+                        <div class="weui-cells__title">任务信息</div>
+                        <div class="weui-cells weui-cells_form">
+                            <div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
+                                <div class="weui-cell__hd">
+                                    <label for="" class="weui-label">任务类型</label>
+                                </div>
+                                <div class="weui-cell__bd">
+                                    <select class="weui-select" name="select2">
+                                        <option value="1">商机</option>
+                                        <option value="2">项目</option>
+                                        <option value="3">其他</option>
+                                        <option value="4">行政</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
+                                <div class="weui-cell__hd">
+                                    <label for="" class="weui-label">任务关联</label>
+                                </div>
+                                <div class="weui-cell__bd">
+                                    <select class="weui-select" name="select2">
+                                        <option value="1">智慧镇江抽奖平台</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
+                                <div class="weui-cell__hd">
+                                    <label for="" class="weui-label">任务级别</label>
+                                </div>
+                                <div class="weui-cell__bd">
+                                    <select class="weui-select" name="select2">
+                                        <option value="1">一般</option>
+                                        <option value="1">紧急</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="weui-cell weui-cell_active">
+                                <div class="weui-cell__hd"><label class="weui-label">预计工时</label></div>
+                                <div class="weui-cell__bd">
+                                    <input class="weui-input" type="number" placeholder="人/日">
+                                </div>
+                            </div>
+                            <div class="weui-cell weui-cell_active">
+                                <div class="weui-cell__hd"><label class="weui-label">任务标题</label></div>
+                                <div class="weui-cell__bd">
+                                    <input class="weui-input" type="text" placeholder="人/日">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weui-cells__group weui-cells__group_form">
+                        <div class="weui-cells__title">任务描述</div>
+                        <div class="weui-cells weui-cells_form">
+                            <div class="weui-cell ">
+                                <div class="weui-cell__bd">
+                                    <textarea class="weui-textarea" placeholder="请填写任务描述" rows="3"></textarea>
+                                    <div class="weui-textarea-counter"><span>0</span>/200</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="weui-form__opr-area">
+                    <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">确 定</a>
+                    <a class="weui-btn weui-btn_default" href="javascript:" id="showTooltips" onclick="goBack();">返 回</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body></html>
+
+
+<script src="js/jQuery-2.2.0.min.js"></script>
+<script src="js/manage.js"></script>
