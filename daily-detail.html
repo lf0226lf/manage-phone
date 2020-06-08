@@ -43,23 +43,30 @@
 							<span class="iconfont icon-jia"></span>
 						</a>
 					</div>
-					<div class="weui-panel__bd">
-						<!--
+					<div class="weui-panel__bd" id="addDailyContent">
+
 						<a href="daily-add-detail.html" class="weui-media-box weui-media-box_appmsg">
 							<div class="weui-media-box__bd">
 								<h4 class="weui-media-box__title">考试系统 <small>0.5人/日</small></h4>
 								<p class="weui-media-box__desc">日报内容日报内容日报内容日报内容</p>
+								<ul class="weui-media-box__info">
+									<li class="weui-media-box__info__meta">审批人：刘飞</li>
+								</ul>
 							</div>
 						</a>
 						<a href="daily-add-detail.html" class="weui-media-box weui-media-box_appmsg">
 							<div class="weui-media-box__bd">
 								<h4 class="weui-media-box__title">考试系统 <small>0.5人/日</small></h4>
 								<p class="weui-media-box__desc">日报内容日报内容日报内容日报内容</p>
+								<ul class="weui-media-box__info">
+									<li class="weui-media-box__info__meta">审批人：刘飞</li>
+								</ul>
 							</div>
 						</a>
--->
+
 					</div>
 				</div>
+				<!--
 				<div class="weui-cells__title">审批流程</div>
 				<div class="weui-cells">
 					<div class="weui-cell ">
@@ -75,6 +82,7 @@
 						<div class="weui-cell__ft">王万金</div>
 					</a>
 				</div>
+-->
 				<div class="weui-btn-area">
 					<a href="javascript:" class="weui-btn weui-btn_primary">提交</a>
 					<a class="weui-btn weui-btn_default" href="home.html" id="showTooltips">返 回</a>
@@ -93,10 +101,11 @@
 						<div class="weui-cells weui-cells_form">
 							<div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
 								<div class="weui-cell__hd">
-									<label for="" class="weui-label">日报类型</label>
+									<label for="dailyType" class="weui-label">日报类型</label>
 								</div>
 								<div class="weui-cell__bd">
-									<select class="weui-select" name="select2">
+									<select id="dailyType" class="weui-select" name="select1">
+										<option value="">---请选择---</option>
 										<option value="1">商机</option>
 										<option value="2">项目</option>
 										<option value="3">其他</option>
@@ -106,10 +115,11 @@
 							</div>
 							<div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
 								<div class="weui-cell__hd">
-									<label for="" class="weui-label">关联对象</label>
+									<label for="dailyObj" class="weui-label">关联对象</label>
 								</div>
 								<div class="weui-cell__bd">
-									<select class="weui-select" name="select2">
+									<select id="dailyObj" class="weui-select" name="select2">
+										<option value="">---请选择---</option>
 										<option value="1">一卡通</option>
 										<option value="2">项目名称</option>
 										<option value="3">项目名称</option>
@@ -119,7 +129,7 @@
 							<div class="weui-cell weui-cell_active">
 								<div class="weui-cell__hd"><label class="weui-label">耗时</label></div>
 								<div class="weui-cell__bd">
-									<input class="weui-input" type="number" placeholder="人/日">
+									<input id="dailyTime" class="weui-input" type="number" placeholder="人/日">
 								</div>
 							</div>
 						</div>
@@ -129,16 +139,54 @@
 						<div class="weui-cells weui-cells_form">
 							<div class="weui-cell ">
 								<div class="weui-cell__bd">
-									<textarea class="weui-textarea" placeholder="请描述日报内容" rows="3"></textarea>
+									<textarea id="dailyContent" class="weui-textarea" placeholder="请描述日报内容" rows="3"></textarea>
 									<div class="weui-textarea-counter"><span>0</span>/200</div>
 								</div>
 							</div>
 						</div>
 					</div>
+					<div class="weui-cells__group weui-cells__group_form">
+						<div class="weui-cells__title">审批流程</div>
+						<div class="weui-cells weui-cells_form">
+							<div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
+								<div class="weui-cell__hd">
+									<label for="auditSection" class="weui-label">部门</label>
+								</div>
+								<div class="weui-cell__bd">
+									<select id="auditSection" class="weui-select" name="select3">
+										<option value="" value="">---请选择---</option>
+										<option value="1">商机</option>
+										<option value="2">项目</option>
+										<option value="3">其他</option>
+										<option value="4">行政</option>
+									</select>
+								</div>
+							</div>
+							<div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
+								<div class="weui-cell__hd">
+									<label for="auditPeople" class="weui-label">人员</label>
+								</div>
+								<div class="weui-cell__bd">
+									<select id="auditPeople" class="weui-select" name="select4">
+										<option value="">---请选择---</option>
+										<option value="1">一卡通</option>
+										<option value="2">项目名称</option>
+										<option value="3">项目名称</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="weui-form__tips-area">
+					<p class="weui-form__tips" id="daily-tips">
+						<!--                        表单页提示，居中对齐-->
+					</p>
 				</div>
 				<div class="weui-form__opr-area">
-					<a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">确 定</a>
-					<a class="weui-btn weui-btn_default" href="javascript:" id="showTooltips" onclick="hideMask();">返 回</a>
+					<a id="addDailyBtn" class="weui-btn weui-btn_primary" href="javascript:" onclick="addDaily();">新 增</a>
+					<a id="editDailyBtn" class="weui-btn weui-btn_primary" href="javascript:" onclick="editDaily();">修 改</a>
+					<a class="weui-btn weui-btn_default" href="javascript:" onclick="hideMask();">返 回</a>
 				</div>
 			</form>
 		</div>
@@ -150,6 +198,7 @@
 <script src="js/weui.min.js"></script>
 <script src="js/util.js"></script>
 <script>
+	var daily={},allDaily=[],num=0,editnum;
 	var date = getCurrentDate();
 	$('.dateShow').text(date);
 //	时间选择
@@ -172,19 +221,132 @@
 			title: '选择日期'
 		});
 	});
-//	打开弹窗
+//	打开新增日报弹窗
 	function addWork() {
+		$('#addDailyBtn').show();
+		$('#editDailyBtn').hide();
 		$('#addWork').show();
 	}
 //	隐藏弹窗，重置表单
 	function hideMask(){
-		$('.weui-mask').hide();
 		document.getElementById('addWorkForm').reset();
+		$('.weui-mask').hide();
 	}
-	构造日报对象
-	function Daily(){
+//	构造日报对象
+	function Daily(num,type,obj,time,content,section,people){
 		var o=new Object();
+		o.num=num;
 		o.type=type;
-		
+		o.obj=obj;
+		o.time=time;
+		o.content=content;
+		o.section=section;
+		o.people=people;
+		return o;
+	}
+//	新增日报
+	function addDaily(){
+		var mark = false;
+		var type = $('#dailyType').val();
+		var obj = $('#dailyObj').val();
+		var time = $('#dailyTime').val();
+		var content = $('#dailyContent').val();
+		var section = $('#auditSection').val();
+		var people = $('#auditPeople').val();
+		if (type == ""){
+			$('#daily-tips').text('请选择日报类型');
+		} else if(obj == ""){
+			$('#daily-tips').text('请选择对象类型');
+		} else if(time == ""){
+			$('#daily-tips').text('请填写耗时');
+		} else if(content == ""){
+			$('#daily-tips').text('请填写日报内容');
+		} else if(section == ""){
+			$('#daily-tips').text('请选择审批部门');
+		} else if(people == ""){
+			$('#daily-tips').text('请选择审批人员');
+		} else {
+			mark = true;
+		}
+		if (mark){
+			$('#daily-tips').text('');
+			$('.weui-mask').hide();
+			document.getElementById('addWorkForm').reset();
+			daily = new Daily(num,type,obj,time,content,section,people);
+			console.log(daily);
+			var html = '<a href="javascript:" onclick=editWork(' + num++ +') class="weui-media-box weui-media-box_appmsg">'+
+							'<div class="weui-media-box__bd">'+
+								'<h4 class="weui-media-box__title">'+daily.obj +'<small>'+daily.time+'人/日</small></h4>'+
+								'<p class="weui-media-box__desc">'+daily.content+'</p>'+
+								'<ul class="weui-media-box__info"><li class="weui-media-box__info__meta">审批人：'+daily.people+'</li></ul>'+
+							'</div>'+
+						'</a>';
+			$('#addDailyContent').append(html);
+			allDaily.push(daily);
+			console.log(allDaily);
+		}
+	}
+//	打开编辑日报弹窗
+	function editWork(num){
+		editnum = allDaily[num].num;
+		$('#dailyType').val(allDaily[num].type);
+		$('#dailyObj').val(allDaily[num].obj);
+		$('#dailyTime').val(allDaily[num].time);
+		$('#dailyContent').val(allDaily[num].content);
+		$('#auditSection').val(allDaily[num].section);
+		$('#auditPeople').val(allDaily[num].people);
+		$('#editDailyBtn').show();
+		$('#addDailyBtn').hide();
+		$('#addWork').show();
+	}
+//	修改日报
+	function editDaily(){
+		var mark = false;
+		var type = $('#dailyType').val();
+		var obj = $('#dailyObj').val();
+		var time = $('#dailyTime').val();
+		var content = $('#dailyContent').val();
+		var section = $('#auditSection').val();
+		var people = $('#auditPeople').val();
+		if (type == ""){
+			$('#daily-tips').text('请选择日报类型');
+		} else if(obj == ""){
+			$('#daily-tips').text('请选择对象类型');
+		} else if(time == ""){
+			$('#daily-tips').text('请填写耗时');
+		} else if(content == ""){
+			$('#daily-tips').text('请填写日报内容');
+		} else if(section == ""){
+			$('#daily-tips').text('请选择审批部门');
+		} else if(people == ""){
+			$('#daily-tips').text('请选择审批人员');
+		} else {
+			mark = true;
+		}
+		if (mark){
+			$('#daily-tips').text('');
+			$('.weui-mask').hide();
+			document.getElementById('addWorkForm').reset();
+			daily = new Daily(editnum,type,obj,time,content,section,people);
+			console.log(daily);
+			allDaily[editnum].type=daily.type;
+			allDaily[editnum].obj=daily.obj;
+			allDaily[editnum].time=daily.time;
+			allDaily[editnum].content=daily.content;
+			allDaily[editnum].section=daily.section;
+			allDaily[editnum].people=daily.people;
+			console.log(allDaily);
+			var html = '';
+			$.each(allDaily, function (index, obj){
+				html += '<a href="javascript:" onclick=editWork(' + obj.num +') class="weui-media-box weui-media-box_appmsg">'+
+							'<div class="weui-media-box__bd">'+
+								'<h4 class="weui-media-box__title">'+obj.obj +'<small>'+obj.time+'人/日</small></h4>'+
+								'<p class="weui-media-box__desc">'+obj.content+'</p>'+
+								'<ul class="weui-media-box__info"><li class="weui-media-box__info__meta">审批人：'+obj.people+'</li></ul>'+
+							'</div>'+
+						'</a>';
+			});
+			$('#addDailyContent').html(html);
+		}
 	}
 </script>
