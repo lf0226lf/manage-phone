@@ -111,7 +111,6 @@ $('#login').click(function () {
 		$('#login-tips').html('用户名或密码不能为空');
 	} else {
 		$.ajax({
-			//			,
 			url: apiUrl+'phoneLogin',
 			type: 'POST',
 			data: {
@@ -124,7 +123,7 @@ $('#login').click(function () {
 					$('#login-tips').html(result.resultMsg);
 //					$('#topTips').html(result.resultMsg).fadeIn(200).delay(1500).fadeOut(200);
 				} else {
-					setCookie('ddid', '1248424434749904', 0.02083, '/');
+					setCookie('ddid', '430728581003950', 0.02083, '/');
 					//				var x = document.cookie;
 					//				console.log(x);
 					$(window).attr('location', 'home.html');

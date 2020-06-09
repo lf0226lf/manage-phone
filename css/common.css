@@ -660,3 +660,11 @@ body[data-weui-theme=dark] .page.home .page__bd img {
 .weui-form__tips{
 	color: var(--weui-RED);
 }
+
+.weui-dialog__title{
+	color: var(--weui-FG-0);
+}
+
+.weui-cell__bd {
+    color: var(--weui-FG-0);
+}

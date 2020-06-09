@@ -1,14 +1,34 @@
 var type;
-var totalPage = 30;
-var currentPage;
+var process_type = {
+	"0": "日报",
+	"1": "项目立项",
+	"2": "报价"
+};
+var totalPage;
+var currentPage = 1;
 
 function init() {
 	$.ajax({
-		url: 'http://123.com',
-		dataType: "json",
+		url: apiUrl + 'queryTaskList',
+		type: 'GET',
+		data: {
+			ddUserId: getDdid,
+			handleStatus: '0',
+			processType: '0',
+			rowsPerPage: '8',
+			currentPage: currentPage.toString(),
+			sortField: 't.f_taskid',
+			sortOrder: 'desc'
+		},
 		success: function (result) {
-			add(result, 1);
-			console.log(result);
+			if (result.resultData.length == 0) {
+				//无数据显示
+			} else {
+				add(result, 1);
+				totalPage = result.resultPojo.pages;
+				console.log(result.resultData);
+				console.log(totalPage);
+			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
@@ -17,26 +37,57 @@ function init() {
 }
 
 function addDate() {
-	$.ajax({
-		url: 'http://123.com',
-		dataType: "json",
-		success: function (result) {
-			add(result, 2);
-			console.log(result);
-		},
-		error: function (XMLHttpRequest, textStatus, errorThrown) {
-			console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
-		}
-	})
+	if (currentPage < totalPage) {
+		currentPage++;
+		console.log(currentPage);
+		$.ajax({
+			url: apiUrl + 'queryTaskList',
+			type: 'GET',
+			async: true,
+			data: {
+				ddUserId: getDdid,
+				handleStatus: '0',
+				processType: '0',
+				rowsPerPage: '8',
+				currentPage: currentPage.toString(),
+				sortField: 't.f_taskid',
+				sortOrder: 'desc'
+			},
+			success: function (result) {
+				add(result, 2);
+				console.log(result);
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+			}
+		})
+		return false;
+	} else {
+		return true;
+	}
 }
 
 function refreshDate() {
+	currentPage = 1;
 	$.ajax({
-		url: 'http://123.com',
-		dataType: "json",
+		url: apiUrl + 'queryTaskList',
+		type: 'GET',
+		async: true,
+		data: {
+			ddUserId: getDdid,
+			handleStatus: '0',
+			processType: '0',
+			rowsPerPage: '8',
+			currentPage: currentPage.toString(),
+			sortField: 't.f_taskid',
+			sortOrder: 'desc'
+		},
 		success: function (result) {
-			add(result, 3);
-			console.log(result);
+			if (result.resultData.length == 0) {
+				//无数据显示
+			} else {
+				add(result, 3);
+			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
@@ -58,15 +109,15 @@ function add(result, type) {
 
 function initBox(result) {
 	var html = "";
-	$.each(result.list, function (index, obj) {
-		html += '<a class="weui-media-box weui-media-box_appmsg item" href="daily-detail-audit.html">' +
+	$.each(result.resultData, function (index, obj) {
+		html += '<a class="weui-media-box weui-media-box_appmsg item" href="daily-detail-audit.html?id=' + obj.taskId + '">' +
 			'<div class="weui-media-box__bd">' +
-			'<h4 class="weui-media-box__title">' + obj.title +
-			'<small>' + obj.hours + '人/日</small></h4>' +
-			'<p class="weui-media-box__desc">' + obj.intro + '</p>' +
+			'<h4 class="weui-media-box__title">' + process_type[obj.processType] + index +
+			//			'<small>' + obj.hours + '人/日</small></h4>' +
+			'<p class="weui-media-box__desc">' + obj.objName + '</p>' +
 			'<ul class="weui-media-box__info">' +
-			'<li class="weui-media-box__info__meta">' + obj.name + '</li>' +
-			'<li class="weui-media-box__info__meta">' + obj.datetime + '</li>' +
+			'<li class="weui-media-box__info__meta">' + obj.creater + '</li>' +
+			'<li class="weui-media-box__info__meta">' + obj.createTime + '</li>' +
 			'</ul>' +
 			'</div>' +
 			'</a>';
@@ -77,15 +128,15 @@ function initBox(result) {
 
 function addBox(result) {
 	var html = "";
-	$.each(result.list, function (index, obj) {
-		html += '<a class="weui-media-box weui-media-box_appmsg item" href="daily-detail-audit.html">' +
+	$.each(result.resultData, function (index, obj) {
+		html += '<a class="weui-media-box weui-media-box_appmsg item" href="daily-detail-audit.html?id=' + obj.taskId + '">' +
 			'<div class="weui-media-box__bd">' +
-			'<h4 class="weui-media-box__title">' + obj.title +
-			'<small>' + obj.hours + '人/日</small></h4>' +
-			'<p class="weui-media-box__desc">' + obj.intro + '</p>' +
+			'<h4 class="weui-media-box__title">' + process_type[obj.processType] + index +
+			//			'<small>' + obj.hours + '人/日</small></h4>' +
+			'<p class="weui-media-box__desc">' + obj.objName + '</p>' +
 			'<ul class="weui-media-box__info">' +
-			'<li class="weui-media-box__info__meta">' + obj.name + '</li>' +
-			'<li class="weui-media-box__info__meta">' + obj.datetime + '</li>' +
+			'<li class="weui-media-box__info__meta">' + obj.creater + '</li>' +
+			'<li class="weui-media-box__info__meta">' + obj.createTime + '</li>' +
 			'</ul>' +
 			'</div>' +
 			'</a>';
@@ -95,15 +146,15 @@ function addBox(result) {
 
 function refreshBox(result) {
 	var html = "";
-	$.each(result.list, function (index, obj) {
-		html += '<a class="weui-media-box weui-media-box_appmsg item" href="daily-detail-audit.html">' +
+	$.each(result.resultData, function (index, obj) {
+		html += '<a class="weui-media-box weui-media-box_appmsg item" href="daily-detail-audit.html?id=' + obj.taskId + '">' +
 			'<div class="weui-media-box__bd">' +
-			'<h4 class="weui-media-box__title">' + obj.title +
-			'<small>' + obj.hours + '人/日</small></h4>' +
-			'<p class="weui-media-box__desc">' + obj.intro + '</p>' +
+			'<h4 class="weui-media-box__title">' + process_type[obj.processType] + index +
+			//			'<small>' + obj.hours + '人/日</small></h4>' +
+			'<p class="weui-media-box__desc">' + obj.objName + '</p>' +
 			'<ul class="weui-media-box__info">' +
-			'<li class="weui-media-box__info__meta">' + obj.name + '</li>' +
-			'<li class="weui-media-box__info__meta">' + obj.datetime + '</li>' +
+			'<li class="weui-media-box__info__meta">' + obj.creater + '</li>' +
+			'<li class="weui-media-box__info__meta">' + obj.createTime + '</li>' +
 			'</ul>' +
 			'</div>' +
 			'</a>';
