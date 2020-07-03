@@ -3,6 +3,7 @@ var pullDownFlag, pullUpFlag;
 var pullDown, pullUp;
 var spinner;
 
+
 function loaded() {
 	pullDownFlag = 0;
 	pullUpFlag = 0;
@@ -57,7 +58,7 @@ function action() {
 	}
 	if (pullUpFlag == 1) {
 		var end = pullUpAction();
-		console.log(end);
+		//console.log(end);
 		if (end) {
 			setTimeout(function () {
 				pullUp.html("加载结束");
@@ -75,8 +76,8 @@ function action() {
 //下拉刷新动作
 function pullDownAction() {
 	pullDown.html("正在刷新…");
+	refreshDate();
 	setTimeout(function () {
-		refreshDate();
 		pullDown.html("刷新完成…");
 		setTimeout(function () {
 			myScroll.refresh();
@@ -85,14 +86,11 @@ function pullDownAction() {
 }
 //上拉加载动作
 function pullUpAction() {
-	//		setTimeout(function () {
 	var end = addDate();
-
 	setTimeout(function () {
 		myScroll.refresh();
 	}, 300);
 	return end;
-	//	}, 1000);
 }
 
 function updatePosition() {

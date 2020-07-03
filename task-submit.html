@@ -2,68 +2,140 @@
 <html lang="ch">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
-    <title>首页</title>
-    <link rel="stylesheet" href="css/weui.css">
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1850030_8mjq6fkswqc.css">
-    <link rel="stylesheet" href="css/manage.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+	<title>首页</title>
+	<link rel="stylesheet" href="css/weui.css">
+	<link rel="stylesheet" href="css/common.css">
+	<link rel="stylesheet" href="//at.alicdn.com/t/font_1850030_8mjq6fkswqc.css">
+	<link rel="stylesheet" href="css/manage.css">
 </head>
 
 <body ontouchstart>
-    <div class="container" id="container">
-        <div class="page form_page js_show">
-            <div class="weui-form">
-                <div class="weui-form__control-area">
-                    <div class="weui-cells__group weui-cells__group_form">
-                        <div class="weui-cells__title">任务信息</div>
-                        <div class="weui-cells weui-cells_form">
-                            <div class="weui-cell weui-cell_active">
-                                <div class="weui-cell__hd"><label class="weui-label">任务标题</label></div>
-                                <div class="weui-cell__bd">
-                                    <input class="weui-input" type="text" placeholder="人/日" value="任务标题" disabled>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="weui-cells__group weui-cells__group_form">
-                        <div class="weui-cells__title">完成信息</div>
-                        <div class="weui-cells weui-cells_form">
-                            <div class="weui-cell weui-cell_active">
-                                <div class="weui-cell__hd">实际完成时间</div>
-                                <div class="weui-cell__bd">
-                                    <input class="weui-input" type="datetime-local">
-                                </div>
-                            </div>
-                            <div class="weui-cell weui-cell_active">
-                                <div class="weui-cell__hd"><label class="weui-label">实际工时</label></div>
-                                <div class="weui-cell__bd">
-                                    <input class="weui-input" type="number" placeholder="人/日">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="weui-cells__group weui-cells__group_form">
-                        <div class="weui-cells__title">完成描述</div>
-                        <div class="weui-cells weui-cells_form">
-                            <div class="weui-cell ">
-                                <div class="weui-cell__bd">
-                                    <textarea class="weui-textarea" placeholder="请填写完成描述" rows="3"></textarea>
-                                    <div class="weui-textarea-counter"><span>0</span>/200</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="weui-form__opr-area">
-                    <a class="weui-btn weui-btn_primary" href="home.html" id="showTooltips">确定</a>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="container" id="container">
+		<div class="page form_page js_show">
+			<div class="weui-form">
+				<div class="weui-form__control-area">
+					<div class="weui-cells__group weui-cells__group_form">
+						<div class="weui-cells__title">任务信息</div>
+						<div class="weui-cells weui-cells_form">
+							<div class="weui-cell weui-cell_active">
+								<div class="weui-cell__hd"><label class="weui-label">任务标题</label></div>
+								<div class="weui-cell__bd">
+									<input class="weui-input" id="missionName" type="text" placeholder="" value="任务标题" disabled>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="weui-cells__group weui-cells__group_form">
+						<div class="weui-cells__title">完成信息</div>
+						<div class="weui-cells weui-cells_form">
+							<div class="weui-cell weui-cell_active">
+								<div class="weui-cell__hd">实际完成时间</div>
+								<div class="weui-cell__bd">
+									<input class="weui-input" type="datetime-local" id="actualFinishTime">
+								</div>
+							</div>
+							<div class="weui-cell weui-cell_active">
+								<div class="weui-cell__hd"><label class="weui-label">实际工时</label></div>
+								<div class="weui-cell__bd">
+									<input class="weui-input" type="number" placeholder="人/日" id="actualDaily">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="weui-cells__group weui-cells__group_form">
+						<div class="weui-cells__title">完成描述</div>
+						<div class="weui-cells weui-cells_form">
+							<div class="weui-cell ">
+								<div class="weui-cell__bd">
+									<textarea class="weui-textarea" placeholder="请填写完成描述" rows="3" id="finishRemark"></textarea>
+									<div class="weui-textarea-counter"><span>0</span>/200</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="weui-form__opr-area">
+					<a class="weui-btn weui-btn_primary" href="javascript:" onclick="fromSubmit()">确定</a>
+					<a class="weui-btn weui-btn_default" href="javascript:" onclick="goBack();">返 回</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="toast" style="display: none;">
+		<div class="weui-mask_transparent"></div>
+		<div class="weui-toast">
+			<i class="weui-icon-success-no-circle weui-icon_toast"></i>
+			<p class="weui-toast__content">操作成功!</p>
+		</div>
+	</div>
 </body></html>
 
 
 <script src="js/jQuery-2.2.0.min.js"></script>
-<script src="js/manage.js"></script>
+<script src="js/util.js"></script>
+<script src="js/cookie.js"></script>
+<script src="js/common.js"></script>
+<script>
+	var getId = GetRequest();
+	console.log(getId);
+	init();
+	function init() {
+		$.ajax({
+			url: apiUrl + 'queryMission',
+			type: 'GET',
+			data: {
+				missionId: getId.id
+			},
+			success: function (result) {
+				$('#missionName').val(result.resultData.missionName);
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+			}
+		});
+	}
+	function fromSubmit(){
+		var mark = false;
+		var actualDaily= $('#actualDaily').val();
+		var actualFinishTime= $('#actualFinishTime').val();
+		var finishRemark= $('#finishRemark').val();
+		if (actualDaily == ""){
+			
+		}else if(actualFinishTime == ""){
+			
+		}else if(finishRemark == ""){
+			
+		}else{
+			mark =true;
+		}
+		if (mark){
+			$.ajax({
+				url: apiUrl + 'finishMission',
+				type: 'POST',
+				data: {
+					actualDaily:actualDaily,
+					actualFinishTime:actualFinishTime,
+					finishRemark:finishRemark,
+					missionId:getId.id
+				},
+				success: function(result) {
+					console.log(result);
+					var $toast = $('#toast');
+					if ($toast.css('display') != 'none') return;
+					$toast.fadeIn(100);
+					delayURL('task-detail.html?id='+getId.id ,3);
+					setTimeout(function() {
+						$toast.fadeOut(100);
+					}, 3000);
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+				}
+			});
+		}
+	}
+	
+	
+</script>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ch">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+	<title>首页</title>
+	<link rel="stylesheet" href="css/weui.css">
+	<link rel="stylesheet" href="css/common.css">
+	<link rel="stylesheet" href="//at.alicdn.com/t/font_1850030_8mjq6fkswqc.css">
+	<link rel="stylesheet" href="css/manage.css">
+</head>
+
+<body ontouchstart>
+	<div class="weui-navbar">
+		<div class="weui-navbar__item weui-bar__item_on" id="weui-bar__item_0" onclick="taskTab(0);">
+			待办
+		</div>
+		<div class="weui-navbar__item" id="weui-bar__item_1" onclick="taskTab(1);">
+			发起
+		</div>
+		<div class="weui-navbar__item" id="weui-bar__item_2" onclick="taskTab(2);">
+			查看
+		</div>
+		<div class="weui-navbar__item" id="weui-bar__item_4" onclick="taskTab(4);">
+			已办
+		</div>
+	</div>
+	<div class="weui-tab__panel__content wrapper" id="panel_1" style="margin-top: 56px;">
+		<div class="weui-panel weui-panel_access scroller">
+			<div class="pulldown">
+				<span>下拉刷新…</span>
+			</div>
+			<div class="weui-panel__bd list">
+				<!--
+                                    <div class="weui-loadmore">
+                                        <i class="weui-loading"></i>
+                                        <span class="weui-loadmore__tips">正在加载</span>
+                                    </div>
+                                    <div class="weui-loadmore weui-loadmore_line">
+                                        <span class="weui-loadmore__tips">暂无数据</span>
+                                    </div>
+                                    <div class="weui-loadmore weui-loadmore_line weui-loadmore_dot">
+                                        <span class="weui-loadmore__tips"></span>
+                                    </div>
+-->
+			</div>
+			<div class="pullup">
+				<span>上拉加载…</span>
+			</div>
+		</div>
+	</div>
+	<div id="spinner">
+		<div class="double-bounce1"></div>
+		<div class="double-bounce2"></div>
+	</div>
+	<button class="btn btn-primary btn-round btn-abs" onclick="taskAdd();">
+		<span class="iconfont icon-jia"></span>
+	</button>
+</body></html>
+
+
+<!--工具-->
+<script src="js/jQuery-2.2.0.min.js"></script>
+<script src="js/cookie.js"></script>
+<script src="js/common.js"></script>
+<script src="js/data-task.js"></script>
+<script src="js/iscroll-probe.js"></script>
+<script src="js/pullscroll.js"></script>
+<script>
+	init(0);
+	function taskTab(type){
+		$('.weui-navbar__item').removeClass('weui-bar__item_on');
+		$('#weui-bar__item_'+type).addClass('weui-bar__item_on');
+		loadMissions(type);
+		myScroll.scrollTo(0, 0, 0);
+		setTimeout(function () {
+			myScroll.refresh();
+		}, 100);
+	}
+	function taskAdd(){
+		window.parent.frames.location.href = "task-add.html";
+	}
+</script>

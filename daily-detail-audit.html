@@ -17,6 +17,14 @@
 			<div class="page__bd">
 				<div class="weui-cells__title">基本信息</div>
 				<div class="weui-cells">
+<!--
+					<div class="weui-cell ">
+						<div class="weui-cell__bd">
+							<p>发起日期</p>
+						</div>
+						<div class="weui-cell__ft" id="beginTime"></div>
+					</div>
+-->
 					<div class="weui-cell ">
 						<div class="weui-cell__bd">
 							<p>姓名</p>
@@ -27,16 +35,10 @@
 						<div class="weui-cell__bd">
 							<p>发起日期</p>
 						</div>
-						<div class="weui-cell__ft" id="beginTime"></div>
-					</div>
-					<div class="weui-cell ">
-						<div class="weui-cell__bd">
-							<p>日报时间</p>
-						</div>
 						<div class="weui-cell__ft" id="createTime"></div>
 					</div>
 				</div>
-				<div class="weui-panel weui-panel_access">
+				<div class="weui-panel weui-panel_access" style="margin-top: 40px;">
 					<div class="weui-panel__hd">
 						<span>工作内容 </span>
 					</div>
@@ -161,15 +163,13 @@
 			</div>
 		</div>
 	</div>
-	<!--
 	<div id="toast" style="display: none;">
 		<div class="weui-mask_transparent"></div>
 		<div class="weui-toast">
 			<i class="weui-icon-success-no-circle weui-icon_toast"></i>
-			<p class="weui-toast__content">已完成</p>
+			<p class="weui-toast__content">操作成功!</p>
 		</div>
 	</div>
--->
 </body></html>
 
 
@@ -189,7 +189,7 @@
 		success: function(result) {
 			console.log(result);
 			$('#creater').text(result.resultData.creater);
-			$('#beginTime').text(result.resultData.beginTime);
+			//$('#beginTime').text(result.resultData.beginTime);
 			$('#createTime').text(result.resultData.createTime);
 			var type = result.resultData.type;
 			var typeName = {
@@ -250,7 +250,6 @@
 	$('#dialogs').on('click', '.weui-dialog__btn', function() {
 		$(this).parents('.js_dialog').fadeOut(200);
 	});
-	
 	function confirmPass() {
 		$.ajax({
 			url: apiUrl + 'handleDaily',
@@ -261,15 +260,19 @@
 			},
 			success: function(result) {
 				console.log(result);
-				
+				var $toast = $('#toast');
+				if ($toast.css('display') != 'none') return;
+				$toast.fadeIn(100);
+				delayURL('home.html',3);
+				setTimeout(function() {
+					$toast.fadeOut(100);
+				}, 3000);
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
 				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
 			}
-		});
-		window.location.href="/home.html"; 
+		}); 
 	}
-
 	function confirmRefuse() {
 		$.ajax({
 			url: apiUrl + 'handleDaily',
@@ -280,12 +283,17 @@
 			},
 			success: function(result) {
 				console.log(result);
+				var $toast = $('#toast');
+				if ($toast.css('display') != 'none') return;
+				$toast.fadeIn(100);
+				delayURL('home.html',3);
+				setTimeout(function() {
+					$toast.fadeOut(100);
+				}, 3000);
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
 				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
 			}
 		});
-		window.location.href="/home.html"; 
 	}
-
 </script>

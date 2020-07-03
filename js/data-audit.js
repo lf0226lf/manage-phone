@@ -4,6 +4,12 @@ var process_type = {
 	"1": "项目立项",
 	"2": "报价"
 };
+var dailyType = {
+	"0": "商机",
+	"1": "项目",
+	"2": "其他",
+	"3": "行政"
+};
 var totalPage;
 var currentPage = 1;
 
@@ -26,20 +32,20 @@ function init() {
 			} else {
 				add(result, 1);
 				totalPage = result.resultPojo.pages;
-				console.log(result.resultData);
-				console.log(totalPage);
+				//console.log(result.resultData);
+				//console.log(totalPage);
 			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
 		}
-	})
+	});
 }
 
 function addDate() {
 	if (currentPage < totalPage) {
 		currentPage++;
-		console.log(currentPage);
+		//console.log(currentPage);
 		$.ajax({
 			url: apiUrl + 'queryTaskList',
 			type: 'GET',
@@ -55,7 +61,7 @@ function addDate() {
 			},
 			success: function (result) {
 				add(result, 2);
-				console.log(result);
+				//console.log(result);
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrown) {
 				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
@@ -93,6 +99,7 @@ function refreshDate() {
 			console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
 		}
 	})
+
 }
 
 function add(result, type) {
@@ -110,9 +117,9 @@ function add(result, type) {
 function initBox(result) {
 	var html = "";
 	$.each(result.resultData, function (index, obj) {
-		html += '<a class="weui-media-box weui-media-box_appmsg item" href="daily-detail-audit.html?id=' + obj.taskId + '">' +
+		html += '<a href="javascript:" class="weui-media-box weui-media-box_appmsg item" onclick="window.parent.frames.location.href = \'daily-detail-audit.html?id=' + obj.taskId + '\'">' +
 			'<div class="weui-media-box__bd">' +
-			'<h4 class="weui-media-box__title">' + process_type[obj.processType] + index +
+			'<h4 class="weui-media-box__title">' + process_type[obj.processType] +
 			//			'<small>' + obj.hours + '人/日</small></h4>' +
 			'<p class="weui-media-box__desc">' + obj.objName + '</p>' +
 			'<ul class="weui-media-box__info">' +
@@ -122,16 +129,16 @@ function initBox(result) {
 			'</div>' +
 			'</a>';
 	});
-	$('#panel_1 .list').append(html);
+	$('#panel_1 .list').html(html);
 	loaded();
 }
 
 function addBox(result) {
 	var html = "";
 	$.each(result.resultData, function (index, obj) {
-		html += '<a class="weui-media-box weui-media-box_appmsg item" href="daily-detail-audit.html?id=' + obj.taskId + '">' +
+		html += '<a href="javascript:" class="weui-media-box weui-media-box_appmsg item" onclick="window.parent.frames.location.href = \'daily-detail-audit.html?id=' + obj.taskId + '\'">' +
 			'<div class="weui-media-box__bd">' +
-			'<h4 class="weui-media-box__title">' + process_type[obj.processType] + index +
+			'<h4 class="weui-media-box__title">' + process_type[obj.processType] +
 			//			'<small>' + obj.hours + '人/日</small></h4>' +
 			'<p class="weui-media-box__desc">' + obj.objName + '</p>' +
 			'<ul class="weui-media-box__info">' +
@@ -147,9 +154,9 @@ function addBox(result) {
 function refreshBox(result) {
 	var html = "";
 	$.each(result.resultData, function (index, obj) {
-		html += '<a class="weui-media-box weui-media-box_appmsg item" href="daily-detail-audit.html?id=' + obj.taskId + '">' +
+		html += '<a href="javascript:" class="weui-media-box weui-media-box_appmsg item" onclick="window.parent.frames.location.href = \'daily-detail-audit.html?id=' + obj.taskId + '\'">' +
 			'<div class="weui-media-box__bd">' +
-			'<h4 class="weui-media-box__title">' + process_type[obj.processType] + index +
+			'<h4 class="weui-media-box__title">' + process_type[obj.processType] +
 			//			'<small>' + obj.hours + '人/日</small></h4>' +
 			'<p class="weui-media-box__desc">' + obj.objName + '</p>' +
 			'<ul class="weui-media-box__info">' +

@@ -1095,3 +1095,17 @@ function GetRequest(urlStr) {
 	}
 	return theRequest;
 }
+
+
+function delayURL(url,delay) {
+	//var delay = document.getElementById("time").innerHTML; //取到id="time"的对象，.innerHTML取到对象的值
+	//alert(url);
+	if (delay > 0) {
+		delay--;
+		//alert(delay);
+		//document.getElementById("time").innerHTML = delay;
+	} else {
+		window.top.location.href = url; //跳转到URL
+	}
+	setTimeout("delayURL('" + url + "')", 1000); //delayURL() 就是每间隔1000毫秒 调用delayURL(url);
+}

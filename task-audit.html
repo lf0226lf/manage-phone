@@ -2,42 +2,43 @@
 <html lang="ch">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
-    <title>首页</title>
-    <link rel="stylesheet" href="css/weui.css">
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1850030_8mjq6fkswqc.css">
-    <link rel="stylesheet" href="css/manage.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+	<title>首页</title>
+	<link rel="stylesheet" href="css/weui.css">
+	<link rel="stylesheet" href="css/common.css">
+	<link rel="stylesheet" href="//at.alicdn.com/t/font_1850030_8mjq6fkswqc.css">
+	<link rel="stylesheet" href="css/manage.css">
 </head>
 
 <body ontouchstart>
-    <div class="container" id="container">
-        <div class="page form_page js_show">
-            <div class="weui-form">
-                <div class="weui-form__control-area">
-                   <div class="weui-cells__group weui-cells__group_form">
-                        <div class="weui-cells__title">任务信息</div>
-                        <div class="weui-cells weui-cells_form">
-                            <div class="weui-cell weui-cell_active">
-                                <div class="weui-cell__hd"><label class="weui-label">任务标题</label></div>
-                                <div class="weui-cell__bd">
-                                    <input class="weui-input" type="text" placeholder="人/日" value="任务标题" disabled>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="weui-cells__group weui-cells__group_form">
-                        <div class="weui-cells__title">审批信息</div>
-                        <div class="weui-cells weui-cells_form">
-                            <div class="weui-cell weui-cell_active weui-cell_switch">
-                                <div class="weui-cell__bd">是否同意</div>
-                                <div class="weui-cell__ft">
-                                    <input class="weui-switch" type="checkbox" checked>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+	<div class="container" id="container">
+		<div class="page form_page js_show">
+			<div class="weui-form">
+				<div class="weui-form__control-area">
+					<div class="weui-cells__group weui-cells__group_form">
+						<div class="weui-cells__title">任务信息</div>
+						<div class="weui-cells weui-cells_form">
+							<div class="weui-cell weui-cell_active">
+								<div class="weui-cell__hd"><label class="weui-label">任务标题</label></div>
+								<div class="weui-cell__bd">
+									<input class="weui-input" type="text" placeholder="人/日" value="任务标题" id="missionName" disabled>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="weui-cells__group weui-cells__group_form">
+						<div class="weui-cells__title">审批信息</div>
+						<div class="weui-cells weui-cells_form">
+							<div class="weui-cell weui-cell_active weui-cell_switch">
+								<div class="weui-cell__bd">是否同意</div>
+								<div class="weui-cell__ft">
+									<input class="weui-switch" type="checkbox" id="status" checked>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--
                     <div class="weui-cells__group weui-cells__group_form">
                         <div class="weui-cells__title">审批内容</div>
                         <div class="weui-cells weui-cells_form">
@@ -49,15 +50,76 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="weui-form__opr-area">
-                    <a class="weui-btn weui-btn_primary" href="home.html" id="showTooltips">确定</a>
-                </div>
-            </div>
-        </div>
-    </div>
+-->
+				</div>
+				<div class="weui-form__opr-area">
+					<a class="weui-btn weui-btn_primary" href="javascript:" onclick="fromSubmit()">确定</a>
+					<a class="weui-btn weui-btn_default" href="javascript:" id="showTooltips" onclick="goBack();">返 回</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="toast" style="display: none;">
+		<div class="weui-mask_transparent"></div>
+		<div class="weui-toast">
+			<i class="weui-icon-success-no-circle weui-icon_toast"></i>
+			<p class="weui-toast__content">操作成功!</p>
+		</div>
+	</div>
 </body></html>
 
 
 <script src="js/jQuery-2.2.0.min.js"></script>
-<script src="js/manage.js"></script>
+<script src="js/util.js"></script>
+<script src="js/cookie.js"></script>
+<script src="js/common.js"></script>
+<script>
+	var getId = GetRequest();
+	console.log(getId);
+	var status_boolean = {
+		"true": "2",
+		"false": "3"
+	};
+	init();
+	function init() {
+		$.ajax({
+			url: apiUrl + 'queryMission',
+			type: 'GET',
+			data: {
+				missionId: getId.id
+			},
+			success: function (result) {
+				$('#missionName').val(result.resultData.missionName);
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+			}
+		});
+	}
+	function fromSubmit(){
+		var mark = false;
+		var status = status_boolean[$('#status').is(':checked')];
+		console.log(status);
+		$.ajax({
+			url: apiUrl + 'explainMission',
+			type: 'POST',
+			data: {
+				status: status,
+				missionId: getId.id
+			},
+			success: function (result) {
+				console.log(result);
+				var $toast = $('#toast');
+				if ($toast.css('display') != 'none') return;
+				$toast.fadeIn(100);
+				delayURL('task-detail.html?id='+getId.id ,3);
+				setTimeout(function() {
+					$toast.fadeOut(100);
+				}, 3000);
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+			}
+		});
+	}
+</script>

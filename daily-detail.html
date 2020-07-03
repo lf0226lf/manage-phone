@@ -16,35 +16,43 @@
 		<div class="page home js_show">
 			<div class="page__bd">
 				<div class="weui-cells__title">基本信息</div>
-				<div class="weui-cells">
-					<div class="weui-cell ">
-						<div class="weui-cell__bd">
-							<p>姓名</p>
-						</div>
-						<div class="weui-cell__ft">刘飞</div>
-					</div>
-					<div class="weui-cell ">
+				<div class="weui-cells" style="margin-bottom: 40px;">
+					<div class="weui-cell">
 						<div class="weui-cell__bd">
 							<p>发起日期</p>
 						</div>
-						<div class="weui-cell__ft dateShow">2020-05-13</div>
+						<div class="weui-cell__ft dateShow" id="beginTime"></div>
 					</div>
+					<div class="weui-cell" id="userName">
+						<div class="weui-cell__bd">
+							<p>姓名</p>
+						</div>
+						<div class="weui-cell__ft" id="userNameText"></div>
+					</div>
+					<div class="weui-cell" id="processStatus">
+						<div class="weui-cell__bd">
+							<p>审批状态</p>
+						</div>
+						<div class="weui-cell__ft" id="processStatusText"></div>
+					</div>
+					<!--
 					<a id="datepick1" class="weui-cell weui-cell_access showDatePicker" href="javascript:">
 						<div class="weui-cell__bd">
 							<p>日报时间</p>
 						</div>
-						<div class="weui-cell__ft dateShow">2020-05-13</div>
+						<div class="weui-cell__ft dateShow"></div>
 					</a>
+-->
 				</div>
 				<div class="weui-panel weui-panel_access">
 					<div class="weui-panel__hd">
 						<span>工作内容 </span>
-						<a href="javascript:" class="link-right" onclick="addWork();">
+						<a href="javascript:" class="link-right" onclick="addWork();" id="addWorkBtn">
 							<span class="iconfont icon-jia"></span>
 						</a>
 					</div>
 					<div class="weui-panel__bd" id="addDailyContent">
-<!--
+						<!--
 
 						<a href="daily-add-detail.html" class="weui-media-box weui-media-box_appmsg">
 							<div class="weui-media-box__bd">
@@ -86,8 +94,9 @@
 				</div>
 -->
 				<div class="weui-btn-area">
-					<a href="javascript:" class="weui-btn weui-btn_primary">提交</a>
-					<a class="weui-btn weui-btn_default" href="home.html" id="showTooltips">返 回</a>
+					<a href="javascript:" class="weui-btn weui-btn_primary" id="confirmDaily" onclick="confirmDaily()">提 交</a>
+					<a href="javascript:" class="weui-btn weui-btn_primary" id="resendDaily" onclick="resendDaily()" style="display: none;">重 发</a>
+					<a class="weui-btn weui-btn_default" href="javascript:" onclick="goBack()">返 回</a>
 				</div>
 			</div>
 			<div class="page__ft">
@@ -107,24 +116,21 @@
 								</div>
 								<div class="weui-cell__bd">
 									<select id="dailyType" class="weui-select" name="select1">
-										<option value="">---请选择---</option>
-										<option value="1">商机</option>
-										<option value="2">项目</option>
-										<option value="3">其他</option>
-										<option value="4">行政</option>
+										<option value="-1">---请选择---</option>
+										<option value="0">商机</option>
+										<option value="1">项目</option>
+										<option value="2">其他</option>
+										<option value="3">行政</option>
 									</select>
 								</div>
 							</div>
-							<div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
+							<div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after" id="select_project_box" style="display: none;">
 								<div class="weui-cell__hd">
 									<label for="dailyObj" class="weui-label">关联对象</label>
 								</div>
 								<div class="weui-cell__bd">
 									<select id="dailyObj" class="weui-select" name="select2">
-										<option value="">---请选择---</option>
-										<option value="1">一卡通</option>
-										<option value="2">项目名称</option>
-										<option value="3">项目名称</option>
+
 									</select>
 								</div>
 							</div>
@@ -142,12 +148,12 @@
 							<div class="weui-cell ">
 								<div class="weui-cell__bd">
 									<textarea id="dailyContent" class="weui-textarea" placeholder="请描述日报内容" rows="3"></textarea>
-									<div class="weui-textarea-counter"><span>0</span>/200</div>
+									<!--									<div class="weui-textarea-counter"><span>0</span>/200</div>-->
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="weui-cells__group weui-cells__group_form">
+					<div class="weui-cells__group weui-cells__group_form" id="auditUserSel" style="display: none;">
 						<div class="weui-cells__title">审批流程</div>
 						<div class="weui-cells weui-cells_form">
 							<div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
@@ -156,25 +162,29 @@
 								</div>
 								<div class="weui-cell__bd">
 									<select id="auditSection" class="weui-select" name="select3">
-										<option value="" value="">---请选择---</option>
-										<option value="1">商机</option>
-										<option value="2">项目</option>
-										<option value="3">其他</option>
-										<option value="4">行政</option>
 									</select>
 								</div>
 							</div>
-							<div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
+							<div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after" style="display: none;" id="select_user_box">
 								<div class="weui-cell__hd">
-									<label for="auditPeople" class="weui-label">人员</label>
+									<label for="" class="weui-label">人员</label>
 								</div>
 								<div class="weui-cell__bd">
 									<select id="auditPeople" class="weui-select" name="select4">
-										<option value="">---请选择---</option>
-										<option value="1">一卡通</option>
-										<option value="2">项目名称</option>
-										<option value="3">项目名称</option>
 									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="weui-cells__group weui-cells__group_form" id="auditUser" style="display: none;">
+						<div class="weui-cells__title">审批流程</div>
+						<div class="weui-cells weui-cells_form">
+							<div class="weui-cell weui-cell_active">
+								<div class="weui-cell__hd">
+									<label for="" class="weui-label">人员</label>
+								</div>
+								<div class="weui-cell__bd">
+									<input id="auditUserName" class="weui-input" type="text" disabled>
 								</div>
 							</div>
 						</div>
@@ -188,31 +198,177 @@
 				<div class="weui-form__opr-area">
 					<a id="addDailyBtn" class="weui-btn weui-btn_primary" href="javascript:" onclick="addDaily();">新 增</a>
 					<a id="editDailyBtn" class="weui-btn weui-btn_primary" href="javascript:" onclick="editDaily();">修 改</a>
+					<a href="javascript:" class="weui-btn weui-btn_warn" id="deleteDailyBtn">删除</a>
 					<a class="weui-btn weui-btn_default" href="javascript:" onclick="hideMask();">返 回</a>
 				</div>
 			</form>
 		</div>
 	</div>
-</body></html>
+	<div id="showWork" class="weui-mask" style="display: none;">
+		<div class="page form_page js_show">
+			<form id="addWorkForm" class="weui-form">
+				<div class="weui-form__control-area">
+					<div class="weui-cells__group weui-cells__group_form">
+						<div class="weui-cells__title">日报基本信息</div>
+						<div class="weui-cells weui-cells_form">
+							<div class="weui-cell weui-cell_active">
+								<div class="weui-cell__hd">
+									<label class="weui-label">日报类型</label>
+								</div>
+								<div class="weui-cell__bd">
+									<input id="typeShow" class="weui-input" placeholder="" value="" disabled>
+								</div>
+							</div>
+							<div class="weui-cell weui-cell_active" id="select_project_box_show" style="display: none;">
+								<div class="weui-cell__hd">
+									<label for="dailyObj" class="weui-label">关联对象</label>
+								</div>
+								<div class="weui-cell__bd">
+									<input id="projectNameShow" class="weui-input" placeholder="" value="" disabled>
+								</div>
+							</div>
+							<div class="weui-cell weui-cell_active">
+								<div class="weui-cell__hd"><label class="weui-label">耗时</label></div>
+								<div class="weui-cell__bd">
+									<input id="dailyTimeShow" class="weui-input" type="number" placeholder="人/日" value="" disabled>
+								</div>
+							</div>
+							<div class="weui-cell weui-cell_active">
+								<div class="weui-cell__hd"><label class="weui-label">审批状态</label></div>
+								<div class="weui-cell__bd">
+									<input id="dailyStatusShow" class="weui-input" type="text" placeholder="" value="" disabled>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="weui-cells__group weui-cells__group_form">
+						<div class="weui-cells__title">日报内容</div>
+						<div class="weui-cells weui-cells_form">
+							<div class="weui-cell ">
+								<div class="weui-cell__bd">
+									<textarea id="contentShow" class="weui-textarea" placeholder="请描述日报内容" rows="3" disabled></textarea>
+									<!--									<div class="weui-textarea-counter"><span>0</span>/200</div>-->
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="weui-cells__group weui-cells__group_form" id="auditUser">
+						<div class="weui-cells__title">审批流程</div>
+						<div class="weui-cells weui-cells_form">
+							<div class="weui-cell weui-cell_active">
+								<div class="weui-cell__hd">
+									<labe class="weui-label">人员</label>
+								</div>
+								<div class="weui-cell__bd">
+									<input id="handlerShow" class="weui-input" type="text" disabled value="">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="weui-form__tips-area">
+					<p class="weui-form__tips" id="daily-tips">
+						<!--                        表单页提示，居中对齐-->
+					</p>
+				</div>
+				<div class="weui-form__opr-area">
+					<a class="weui-btn weui-btn_default" href="javascript:" onclick="hideMask();">返 回</a>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div id="dialogs">
+		<div class="js_dialog" id="deleteDailyDialog" style="display: none;">
+			<div class="weui-mask"></div>
+			<div class="weui-dialog">
+				<div class="weui-dialog__hd"><strong class="weui-dialog__title">提示</strong></div>
+				<div class="weui-dialog__bd">确定删除吗？</div>
+				<div class="weui-dialog__ft">
+					<a href="javascript:" class="weui-dialog__btn weui-dialog__btn_default">返回</a>
+					<a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary" onclick="deleteDaily()">确定</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="toast" style="display: none;">
+		<div class="weui-mask_transparent"></div>
+		<div class="weui-toast">
+			<i class="weui-icon-success-no-circle weui-icon_toast"></i>
+			<p class="weui-toast__content">操作成功!</p>
+		</div>
+	</div>
+</body>
+
+</html>
 
 
 <script src="js/jQuery-2.2.0.min.js"></script>
 <script src="js/weui.min.js"></script>
 <script src="js/util.js"></script>
+<script src="js/cookie.js"></script>
+<script src="js/common.js"></script>
 <script>
-	var daily={},allDaily=[],num=0,editnum;
+	var daily = {},
+		dailies = {},
+		edit_daily = {},
+		allDaily = [],
+		allDailies = [],
+		totalDailies = [],
+		num = 0,
+		editnum,
+		people = "",
+		peopleId,
+		sectionId = 0,
+		processDetailId = "";
 	var date = getCurrentDate();
-	$('.dateShow').text(date);
-//	时间选择
-	$('#datepick1').on('click', function () {
+	var getId = GetRequest();
+	var dailyStatus = {
+		"0": "待审核",
+		"1": "审核中",
+		"2": "已通过",
+		"3": "未通过"
+	}
+	var dailyType = {
+		"0": "商机",
+		"1": "项目",
+		"2": "其他",
+		"3": "行政"
+	}
+	var dailyState = {
+		"0": "a",
+		"1": "c",
+		"2": "d"
+	}
+	var dailyStateName = {
+		"0": "未处理",
+		"1": "同意",
+		"2": "拒绝"
+	}
+	console.log(getId);
+	if (getId.id != undefined) {
+		init();
+		$('#confirmDaily').hide();
+		$('#deleteDailyBtn').hide();
+		$('#processStatus').show();
+		$('#addWorkBtn').hide();
+	} else {
+		initProject();
+		initGroup();
+		$('#deleteDailyBtn').hide();
+		$('#processStatus').hide();
+		$('#userName').hide();
+		$('#beginTime').text(date);
+	}
+	//	时间选择
+	$('#datepick1').on('click', function() {
 		var year, month, day, date;
 		weui.datePicker({
 			start: 1990,
 			end: new Date().getFullYear(),
-			onChange: function (result) {
+			onChange: function(result) {
 				console.log(result);
 			},
-			onConfirm: function (result) {
+			onConfirm: function(result) {
 				console.log(result);
 				year = result[0] + "";
 				month = result[1] + "";
@@ -223,132 +379,588 @@
 			title: '选择日期'
 		});
 	});
-//	打开新增日报弹窗
+	//	日报类型改变时切换状态
+	$('#dailyType').change(function() {
+		var change = $('#dailyType option:selected').val();
+		//console.log(change);
+		if (change == 0 || change == 1) {
+			$('#select_project_box').show();
+			$('#dailyObj').val('-1');
+		} else {
+			$('#select_project_box').hide();
+		}
+		if (change == 2 || change == 3) {
+			$('#auditUserSel').show();
+			$('#auditUser').hide();
+		} else {
+			$('#auditUserSel').hide();
+			$('#auditUser').hide();
+		}
+		if (change == "-1") {
+			$('#auditUserSel').hide();
+			$('#select_project_box').hide();
+		}
+		people = "";
+	});
+	//	选择商务或项目后初始化项目负责人
+	$('#dailyObj').change(function() {
+		var change = $('#dailyObj option:selected').val();
+		//console.log(change);
+		if (change == "-1") {
+			$('#auditUser').hide();
+		} else {
+			$('#auditUser').show();
+			$.ajax({
+				url: apiUrl + 'queryProjectList',
+				type: 'GET',
+				success: function(result) {
+					console.log(result);
+					$.each(result.resultData, function(index, obj) {
+						if (change == obj.projectId) {
+							var sel = $('#dailyType option:selected').val();
+							console.log(sel);
+							if (sel == 0) {
+								$('#auditUserName').val(obj.businessMan);
+								console.log(obj.businessMan);
+								people = obj.businessMan;
+								peopleId = obj.createId;
+							}
+							if (sel == 1) {
+								$('#auditUserName').val(obj.projectManName);
+								console.log(obj.projectManName);
+								people = obj.projectManName;
+								peopleId = obj.projectMan;
+							}
+						}
+					});
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+				}
+			});
+		}
+	});
+	//	选择部门后，初始化人员列表
+	$('#auditSection').change(function() {
+		var groupId = $('#auditSection option:selected').val();
+		people = "";
+		//console.log(groupId);
+		if (groupId == "") {
+			$('#select_user_box').hide();
+		} else {
+			$('#select_user_box').show();
+			initPeople(groupId);
+		}
+	});
+	$('#auditPeople').change(function() {
+		people = "";
+	});
+	$('#deleteDailyBtn').on('click', function() {
+		$('#deleteDailyDialog').fadeIn(200);
+		$('#deleteDailyDialog .weui-mask').show();
+	});
+	$('#dialogs').on('click', '.weui-dialog__btn', function() {
+		$(this).parents('.js_dialog').fadeOut(200);
+	});
+	//	打开新增日报弹窗
 	function addWork() {
 		$('#addDailyBtn').show();
 		$('#editDailyBtn').hide();
 		$('#addWork').show();
 	}
-//	隐藏弹窗，重置表单
-	function hideMask(){
+	//	隐藏弹窗，重置表单
+	function hideMask() {
 		document.getElementById('addWorkForm').reset();
+		people = "";
 		$('.weui-mask').hide();
+		$('#select_project_box').hide();
+		$('#auditUser').hide();
+		$('#auditUserSel').hide();
+		$('#select_project_box_show').hide();
+		$('#deleteDailyBtn').hide();
 	}
-//	构造日报对象
-	function Daily(num,type,obj,time,content,section,people){
-		var o=new Object();
-		o.num=num;
-		o.type=type;
-		o.obj=obj;
-		o.time=time;
-		o.content=content;
-		o.section=section;
-		o.people=people;
+	//	构造日报对象
+	function Daily(num, type, objId, obj, time, content, sectionId, peopleId, people, createTime) {
+		var o = new Object();
+		o.num = num;
+		o.type = type;
+		o.objId = objId;
+		o.obj = obj;
+		o.time = time;
+		o.content = content;
+		o.sectionId = sectionId;
+		o.peopleId = peopleId;
+		o.people = people;
+		o.createTime = createTime;
 		return o;
 	}
-//	新增日报
-	function addDaily(){
+	//	构造修改日报对象
+	function editDailyObj(dailyId, num, type, objId, obj, time, content, sectionId, peopleId, people, createTime) {
+		var o = new Object();
+		o.dailyId = dailyId;
+		o.num = num;
+		o.type = type;
+		o.objId = objId;
+		o.obj = obj;
+		o.time = time;
+		o.content = content;
+		o.sectionId = sectionId;
+		o.peopleId = peopleId;
+		o.people = people;
+		o.createTime = createTime;
+		return o;
+	}
+	//	构造提交日报对象
+	function Dailys(createTime, type, objId, content, dailyTime, handlerId) {
+		var o = new Object();
+		o.createTime = createTime;
+		o.type = type;
+		o.objId = objId;
+		o.content = content;
+		o.dailyTime = dailyTime;
+		o.handlerId = handlerId;
+		return o;
+	}
+	//	新增日报项
+	function addDaily() {
+		$('#deleteDailyBtn').hide();
+		var change = $('#dailyType option:selected').val();
 		var mark = false;
 		var type = $('#dailyType').val();
-		var obj = $('#dailyObj').val();
+		var objId = $('#dailyObj option:selected').val();
+		var obj = $('#dailyObj option:selected').text();
 		var time = $('#dailyTime').val();
 		var content = $('#dailyContent').val();
-		var section = $('#auditSection').val();
-		var people = $('#auditPeople').val();
-		if (type == ""){
+		var createTime = getCurrentDateTime();
+		if (people == "") {
+			people = $('#auditPeople option:selected').text();
+		}
+		//如果日报类型为其他或行政，项目名称显示为日报类型，人员ID为选择ID
+		if (change == 2 || change == 3) {
+			obj = $('#dailyType option:selected').text();
+			peopleId = $('#auditPeople').val();
+			sectionId = $('#auditSection').val();
+		}
+		if (type == "") {
 			$('#daily-tips').text('请选择日报类型');
-		} else if(obj == ""){
+		} else if (objId == "") {
 			$('#daily-tips').text('请选择对象类型');
-		} else if(time == ""){
+		} else if (time == "") {
 			$('#daily-tips').text('请填写耗时');
-		} else if(content == ""){
+		} else if (content == "") {
 			$('#daily-tips').text('请填写日报内容');
-		} else if(section == ""){
+		} else if (sectionId == "-1") {
 			$('#daily-tips').text('请选择审批部门');
-		} else if(people == ""){
+		} else if (peopleId == "-1") {
 			$('#daily-tips').text('请选择审批人员');
 		} else {
 			mark = true;
 		}
-		if (mark){
+		if (mark) {
 			$('#daily-tips').text('');
 			$('.weui-mask').hide();
+			$('#select_project_box').hide();
+			$('#auditUser').hide();
+			$('#auditUserSel').hide();
 			document.getElementById('addWorkForm').reset();
-			daily = new Daily(num,type,obj,time,content,section,people);
+			daily = new Daily(num, type, objId, obj, time, content, sectionId, peopleId, people, createTime);
 			console.log(daily);
-			var html = '<a href="javascript:" onclick=editWork(' + num++ +') class="weui-media-box weui-media-box_appmsg">'+
-							'<div class="weui-media-box__bd">'+
-								'<h4 class="weui-media-box__title">'+daily.obj +'<small>'+daily.time+'人/日</small></h4>'+
-								'<p class="weui-media-box__desc">'+daily.content+'</p>'+
-								'<ul class="weui-media-box__info"><li class="weui-media-box__info__meta">审批人：'+daily.people+'</li></ul>'+
-							'</div>'+
-						'</a>';
+			var html = '<a href="javascript:" onclick=editWork(' + num++ + ') class="weui-media-box weui-media-box_appmsg">' +
+				'<div class="weui-media-box__bd">' +
+				'<h4 class="weui-media-box__title">' + daily.obj + '<small>' + daily.time + '人/日</small></h4>' +
+				'<p class="weui-media-box__desc">' + daily.content + '</p>' +
+				'<ul class="weui-media-box__info"><li class="weui-media-box__info__meta">审批人：' + daily.people + '</li></ul>' +
+				'</div>' +
+				'</a>';
 			$('#addDailyContent').append(html);
 			allDaily.push(daily);
 			console.log(allDaily);
+			people = "";
 		}
 	}
-//	打开编辑日报弹窗
-	function editWork(num){
+	//	打开编辑日报项弹窗
+	function editWork(num) {
 		editnum = allDaily[num].num;
 		$('#dailyType').val(allDaily[num].type);
-		$('#dailyObj').val(allDaily[num].obj);
+		if (allDaily[num].type == 0 || allDaily[num].type == 1) {
+			initProject();
+			$('#select_project_box').show();
+			$('#auditUser').show();
+			$('#auditUserSel').hide();
+			$('#dailyObj').val(allDaily[num].objId);
+			$('#auditUserName').val(allDaily[num].people);
+		}
+		if (allDaily[num].type == 2 || allDaily[num].type == 3) {
+			initGroup();
+			initPeople(allDaily[num].sectionId);
+			$('#select_project_box').hide();
+			$('#auditUser').hide();
+			$('#auditUserSel').show();
+			$('#auditSection').val(allDaily[num].sectionId);
+			$('#auditPeople').val(allDaily[num].peopleId);
+			$('#select_user_box').show();
+		}
+		people = allDaily[num].people;
 		$('#dailyTime').val(allDaily[num].time);
 		$('#dailyContent').val(allDaily[num].content);
-		$('#auditSection').val(allDaily[num].section);
-		$('#auditPeople').val(allDaily[num].people);
 		$('#editDailyBtn').show();
 		$('#addDailyBtn').hide();
+		$('#deleteDailyBtn').show();
 		$('#addWork').show();
 	}
-//	修改日报
-	function editDaily(){
+	//	修改日报项
+	function editDaily() {
+		var change = $('#dailyType option:selected').val();
 		var mark = false;
 		var type = $('#dailyType').val();
-		var obj = $('#dailyObj').val();
+		var objId = $('#dailyObj option:selected').val();
+		var obj = $('#dailyObj option:selected').text();
 		var time = $('#dailyTime').val();
 		var content = $('#dailyContent').val();
-		var section = $('#auditSection').val();
-		var people = $('#auditPeople').val();
-		if (type == ""){
+		var createTime = getCurrentDateTime();
+		if (people == "") {
+			people = $('#auditPeople option:selected').text();
+		}
+		//如果日报类型为其他或行政，项目名称显示为日报类型，人员ID为选择ID
+		if (change == 2 || change == 3) {
+			obj = $('#dailyType option:selected').text();
+			peopleId = $('#auditPeople').val();
+			sectionId = $('#auditSection').val();
+		}
+		if (type == "") {
 			$('#daily-tips').text('请选择日报类型');
-		} else if(obj == ""){
+		} else if (objId == "") {
 			$('#daily-tips').text('请选择对象类型');
-		} else if(time == ""){
+		} else if (time == "") {
 			$('#daily-tips').text('请填写耗时');
-		} else if(content == ""){
+		} else if (content == "") {
 			$('#daily-tips').text('请填写日报内容');
-		} else if(section == ""){
+		} else if (sectionId == "-1") {
 			$('#daily-tips').text('请选择审批部门');
-		} else if(people == ""){
+		} else if (peopleId == "-1") {
 			$('#daily-tips').text('请选择审批人员');
 		} else {
 			mark = true;
 		}
-		if (mark){
+		if (mark) {
 			$('#daily-tips').text('');
 			$('.weui-mask').hide();
+			$('#select_project_box').hide();
+			$('#auditUser').hide();
+			$('#auditUserSel').hide();
 			document.getElementById('addWorkForm').reset();
-			daily = new Daily(editnum,type,obj,time,content,section,people);
+			daily = new Daily(editnum, type, objId, obj, time, content, sectionId, peopleId, people, createTime);
 			console.log(daily);
-			allDaily[editnum].type=daily.type;
-			allDaily[editnum].obj=daily.obj;
-			allDaily[editnum].time=daily.time;
-			allDaily[editnum].content=daily.content;
-			allDaily[editnum].section=daily.section;
-			allDaily[editnum].people=daily.people;
+			allDaily[editnum].type = daily.type;
+			allDaily[editnum].objId = daily.objId;
+			allDaily[editnum].obj = daily.obj;
+			allDaily[editnum].time = daily.time;
+			allDaily[editnum].content = daily.content;
+			allDaily[editnum].sectionId = daily.sectionId;
+			allDaily[editnum].peopleId = daily.peopleId;
+			allDaily[editnum].people = daily.people;
 			console.log(allDaily);
 			var html = '';
-			$.each(allDaily, function (index, obj){
-				html += '<a href="javascript:" onclick=editWork(' + obj.num +') class="weui-media-box weui-media-box_appmsg">'+
-							'<div class="weui-media-box__bd">'+
-								'<h4 class="weui-media-box__title">'+obj.obj +'<small>'+obj.time+'人/日</small></h4>'+
-								'<p class="weui-media-box__desc">'+obj.content+'</p>'+
-								'<ul class="weui-media-box__info"><li class="weui-media-box__info__meta">审批人：'+obj.people+'</li></ul>'+
-							'</div>'+
-						'</a>';
+			$.each(allDaily, function(index, obj) {
+				html += '<a href="javascript:" onclick=editWork(' + obj.num + ') class="weui-media-box weui-media-box_appmsg">' +
+					'<div class="weui-media-box__bd">' +
+					'<h4 class="weui-media-box__title">' + obj.obj + '<small>' + obj.time + '人/日</small></h4>' +
+					'<p class="weui-media-box__desc">' + obj.content + '</p>' +
+					'<ul class="weui-media-box__info"><li class="weui-media-box__info__meta">审批人：' + obj.people + '</li></ul>' +
+					'</div>' +
+					'</a>';
 			});
 			$('#addDailyContent').html(html);
+			people = "";
 		}
+	}
+	//	查看日报项
+	function showWork(num) {
+		var dailyTypeNum = allDailies[num].type;
+		if (dailyTypeNum == 0 || dailyTypeNum == 1) {
+			$('#select_project_box_show').show();
+			$('#projectNameShow').val(allDailies[num].projectName);
+		}
+		$('#typeShow').val(dailyType[dailyTypeNum]);
+		$('#dailyTimeShow').val(allDailies[num].dailyTime);
+		$('#dailyStatusShow').val(dailyStateName[allDailies[num].status]);
+		$('#contentShow').val(allDailies[num].content);
+		$('#handlerShow').val(allDailies[num].handler);
+		$('#showWork').show();
+	}
+	//	删除日报项
+	function deleteDaily() {
+		console.log(editnum);
+		allDaily.splice(editnum, 1);
+		$('#daily-tips').text('');
+		$('.weui-mask').hide();
+		$('#select_project_box').hide();
+		$('#auditUser').hide();
+		$('#auditUserSel').hide();
+		$('#deleteDailyBtn').hide();
+		document.getElementById('addWorkForm').reset();
+		var html = '';
+		$.each(allDaily, function(index, obj) {
+			obj.num = index;
+			var title;
+			if (obj.type == 0 || obj.type == 1) {
+				title = obj.obj;
+			}
+			if (obj.type == 2 || obj.type == 3) {
+				title = dailyType[obj.type];
+			}
+			html += '<a href="javascript:" onclick=editWork(' + obj.num + ') class="weui-media-box weui-media-box_appmsg">' +
+				'<div class="weui-media-box__bd">' +
+				'<h4 class="weui-media-box__title">' + title + '<small>' + obj.time + '人/日</small></h4>' +
+				'<p class="weui-media-box__desc">' + obj.content + '</p>' +
+				'<ul class="weui-media-box__info"><li class="weui-media-box__info__meta">审批人：' + obj.people + '</li></ul>' +
+				'</div>' +
+				'</a>';
+		});
+		console.log(allDaily);
+		$('#addDailyContent').html(html);
+		num--;
+		$('#addWork').hide();
+	}
+	//	重发日报页面
+	function resendDaily() {
+		initProject();
+		initGroup();
+		$('#beginTime').text(date);
+		$('#userName').hide();
+		$('#processStatus').hide();
+		$('#addWorkBtn').show();
+		$('#confirmDaily').show();
+		$('#resendDaily').hide();
+		$.ajax({
+			url: apiUrl + 'queryProcessDetail',
+			type: 'GET',
+			data: {
+				processDetailId: getId.id
+			},
+			success: function(result) {
+				console.log(result);
+				allDailies = result.resultData.dailies;
+				console.log(allDailies);
+				$('#userNameText').text(result.resultData.creater);
+				$('#processStatusText').text(dailyStatus[result.resultData.status]);
+				var html = "";
+				num = 0;
+				processDetailId = result.resultData.processDetailId;
+				console.log(processDetailId);
+				$('#addDailyContent').html(html);
+				$.each(allDailies, function(index, obj) {
+					var title;
+					if (obj.type == 0 || obj.type == 1) {
+						title = obj.projectName;
+					}
+					if (obj.type == 2 || obj.type == 3) {
+						title = dailyType[obj.type];
+					}
+					edit_daily = new editDailyObj(obj.dailyId, num, obj.type, obj.objId, obj.projectName, obj.dailyTime, obj.content, obj.userGroupId, obj.handlerId, obj.handler, obj.createTime);
+					console.log(edit_daily);
+					allDaily.push(edit_daily);
+					var html = '<a href="javascript:" onclick=editWork(' + num++ + ') class="weui-media-box weui-media-box_appmsg">' +
+						'<div class="weui-media-box__bd">' +
+						'<h4 class="weui-media-box__title">' + title + '<small>' + obj.dailyTime + '人/日</small></h4>' +
+						'<p class="weui-media-box__desc">' + obj.content + '</p>' +
+						'<ul class="weui-media-box__info"><li class="weui-media-box__info__meta">审批人：' + obj.handler + '</li></ul>' +
+						'</div>' +
+						'</a>';
+					$('#addDailyContent').append(html);
+				});
+				console.log(allDaily);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+			}
+		});
+	}
+	//	页面初始化
+	function init() {
+		$.ajax({
+			url: apiUrl + 'queryProcessDetail',
+			type: 'GET',
+			data: {
+				processDetailId: getId.id
+			},
+			success: function(result) {
+				console.log(result);
+				allDailies = result.resultData.dailies;
+				console.log(allDailies);
+				$('#userNameText').text(result.resultData.creater);
+				$('#beginTime').text(result.resultData.createTime);
+				$('#processStatusText').text(dailyStatus[result.resultData.status]);
+				if (result.resultData.status == 3) {
+					$('#resendDaily').show();
+				}
+				$.each(allDailies, function(index, obj) {
+					var title;
+					if (obj.type == 0 || obj.type == 1) {
+						title = obj.projectName;
+					}
+					if (obj.type == 2 || obj.type == 3) {
+						title = dailyType[obj.type];
+					}
+					var html = '<a href="javascript:" onclick=showWork(' + num++ + ') class="weui-media-box weui-media-box_appmsg">' +
+						'<div class="weui-media-box__bd">' +
+						'<div class="daily_state ' + dailyState[obj.status] + '"><span></span></div>' +
+						'<h4 class="weui-media-box__title">' + title + '<small>' + obj.dailyTime + '人/日</small></h4>' +
+						'<p class="weui-media-box__desc">' + obj.content + '</p>' +
+						'<ul class="weui-media-box__info"><li class="weui-media-box__info__meta">审批人：' + obj.handler + '</li></ul>' +
+						'</div>' +
+						'</a>';
+					$('#addDailyContent').append(html);
+				});
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+			}
+		});
+	}
+	//	初始化项目列表
+	function initProject() {
+		$.ajax({
+			url: apiUrl + 'queryProjectList',
+			type: 'GET',
+			async: false,
+			success: function(result) {
+				//console.log(result);
+				var html = '<option value="-1">---请选择---</option>';
+				$.each(result.resultData, function(index, obj) {
+					html += '<option value="' + obj.projectId + '">' + obj.projectName + '</option>';
+				});
+				$('#dailyObj').html(html);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+			}
+		});
+	}
+	//	初始化部门列表
+	function initGroup() {
+		$.ajax({
+			url: apiUrl + 'queryUserGroupList',
+			type: 'GET',
+			async: false,
+			success: function(result) {
+				//console.log(result);
+				var html = '<option value="-1">---请选择---</option>';
+				$.each(result.resultData, function(index, obj) {
+					html += '<option value="' + obj.userGroupId + '">' + obj.userGroupName + '</option>';
+				});
+				$('#auditSection').html(html);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+			}
+		});
+	}
+	//	初始化人员列表
+	function initPeople(id) {
+		groupId = id;
+		$.ajax({
+			url: apiUrl + 'queryUserList',
+			type: 'GET',
+			async: false,
+			data: {
+				userGroupId: groupId
+			},
+			success: function(result) {
+				console.log(result);
+				var html = '<option value="-1">---请选择---</option>';
+				$.each(result.resultData, function(index, obj) {
+					html += '<option value="' + obj.userId + '">' + obj.userName + '</option>';
+				});
+				$('#auditPeople').html(html);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+			}
+		});
+	}
+	//	提交日报
+	function confirmDaily() {
+		console.log(allDaily);
+		var createTime,
+			type,
+			objId,
+			content,
+			dailyTime,
+			handlerId;
+		$.each(allDaily, function(index, obj) {
+			createTime = obj.createTime;
+			type = obj.type;
+			if (type == 0 || type == 1) {
+				objId = obj.objId;
+			} 
+			if (type == 2 || type == 3) {
+				objId = "";
+			}
+			content = obj.content;
+			dailyTime = obj.time;
+			handlerId = obj.peopleId;
+			dailies = new Dailys(createTime, type, objId, content, dailyTime, handlerId);
+			totalDailies.push(dailies);
+		});
+		console.log(totalDailies);
+		if (processDetailId == ""){
+			var objStr = {
+				ddUserId: getDdid,
+				createTime: getCurrentDateTime(),
+				processId: 2,
+				processType: 0,
+			};
+			$.ajax({
+				url: apiUrl + 'sendProcessDetail',
+				type: 'POST',
+				data: {
+					processDetail: JSON.stringify(objStr),
+					dailys: JSON.stringify(totalDailies)
+				},
+				success: function(result) {
+					console.log(result);
+					var $toast = $('#toast');
+					if ($toast.css('display') != 'none') return;
+					$toast.fadeIn(100);
+					delayURL('home.html', 3);
+					setTimeout(function() {
+						$toast.fadeOut(100);
+					}, 3000);
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+				}
+			});
+		}
+		if (processDetailId != ""){
+			var objStr = {
+				ddUserId: getDdid,
+				createTime: getCurrentDateTime(),
+				processDetailId:processDetailId,
+			};
+			$.ajax({
+				url: apiUrl + 'sendProcessDetailForRe',
+				type: 'POST',
+				data: {
+					processDetail: JSON.stringify(objStr),
+					dailys: JSON.stringify(totalDailies)
+				},
+				success: function(result) {
+					console.log(result);
+					var $toast = $('#toast');
+					if ($toast.css('display') != 'none') return;
+					$toast.fadeIn(100);
+					delayURL('home.html', 3);
+					setTimeout(function() {
+						$toast.fadeOut(100);
+					}, 3000);
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+				}
+			});
+		}
+		totalDailies.splice(0);
 	}
 </script>

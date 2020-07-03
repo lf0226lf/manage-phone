@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ch">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+	<title>首页</title>
+	<link rel="stylesheet" href="css/weui.css">
+	<link rel="stylesheet" href="css/common.css">
+	<link rel="stylesheet" href="//at.alicdn.com/t/font_1850030_8mjq6fkswqc.css">
+	<link rel="stylesheet" href="css/manage.css">
+</head>
+
+<body ontouchstart>
+	<div class="weui-tab__panel__content wrapper" id="panel_1">
+		<div class="weui-panel weui-panel_access scroller">
+			<div class="pulldown">
+				<span>下拉刷新…</span>
+			</div>
+			<div class="weui-panel__bd list">
+				<!--
+                                    <div class="weui-loadmore">
+                                        <i class="weui-loading"></i>
+                                        <span class="weui-loadmore__tips">正在加载</span>
+                                    </div>
+                                    <div class="weui-loadmore weui-loadmore_line">
+                                        <span class="weui-loadmore__tips">暂无数据</span>
+                                    </div>
+                                    <div class="weui-loadmore weui-loadmore_line weui-loadmore_dot">
+                                        <span class="weui-loadmore__tips"></span>
+                                    </div>
+-->
+			</div>
+			<div class="pullup">
+				<span>上拉加载…</span>
+			</div>
+		</div>
+	</div>
+	<div id="spinner">
+		<div class="double-bounce1"></div>
+		<div class="double-bounce2"></div>
+	</div>
+</body>
+
+</html>
+
+
+<!--工具-->
+<script src="js/jQuery-2.2.0.min.js"></script>
+<script src="js/cookie.js"></script>
+<script src="js/common.js"></script>
+<script src="js/data-audit.js"></script>
+<script src="js/iscroll-probe.js"></script>
+<script src="js/pullscroll.js"></script>
+<script>
+	init();
+</script>

@@ -173,7 +173,7 @@ body {
     position: absolute;
     z-index: 9999;
     right: 20px;
-    bottom: 80px;
+    bottom: 20px;
     width: 46px;
     height: 46px;
     box-shadow: 1px 4px 10px 0 rgba(0, 0, 0, 0.2);
@@ -329,4 +329,16 @@ body {
         -webkit-transform: scale(1);
     }
 
+}
+
+.weui-form__tips{
+	color: var(--weui-RED);
+}
+
+.weui-dialog__title{
+	color: var(--weui-FG-0);
+}
+
+.weui-cell__bd {
+    color: var(--weui-FG-0);
 }
