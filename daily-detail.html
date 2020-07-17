@@ -4,10 +4,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
-	<title>首页</title>
+	<title>日报</title>
 	<link rel="stylesheet" href="css/weui.css">
 	<link rel="stylesheet" href="css/common.css">
-	<link rel="stylesheet" href="//at.alicdn.com/t/font_1850030_8mjq6fkswqc.css">
+	<link rel="stylesheet" href="css/iconfont.css">
 	<link rel="stylesheet" href="css/manage.css">
 </head>
 
@@ -93,10 +93,16 @@
 					</a>
 				</div>
 -->
+				
 				<div class="weui-btn-area">
-					<a href="javascript:" class="weui-btn weui-btn_primary" id="confirmDaily" onclick="confirmDaily()">提 交</a>
-					<a href="javascript:" class="weui-btn weui-btn_primary" id="resendDaily" onclick="resendDaily()" style="display: none;">重 发</a>
-					<a class="weui-btn weui-btn_default" href="javascript:" onclick="goBack()">返 回</a>
+					<div class="weui-form__tips-area">
+						<p class="weui-form__tips" id="add-daily-tips">
+							<!--                        表单页提示，居中对齐-->
+						</p>
+					</div>
+					<a href="javascript:" class="weui-btn weui-btn_primary" id="confirmDaily" onclick="confirmDaily()">提交</a>
+					<a href="javascript:" class="weui-btn weui-btn_primary" id="resendDaily" onclick="resendDaily()" style="display: none;">重发</a>
+					<a class="weui-btn weui-btn_default" href="javascript:" onclick="goBack()">返回</a>
 				</div>
 			</div>
 			<div class="page__ft">
@@ -196,10 +202,10 @@
 					</p>
 				</div>
 				<div class="weui-form__opr-area">
-					<a id="addDailyBtn" class="weui-btn weui-btn_primary" href="javascript:" onclick="addDaily();">新 增</a>
-					<a id="editDailyBtn" class="weui-btn weui-btn_primary" href="javascript:" onclick="editDaily();">修 改</a>
+					<a id="addDailyBtn" class="weui-btn weui-btn_primary" href="javascript:" onclick="addDaily();">新增</a>
+					<a id="editDailyBtn" class="weui-btn weui-btn_primary" href="javascript:" onclick="editDaily();">修改</a>
 					<a href="javascript:" class="weui-btn weui-btn_warn" id="deleteDailyBtn">删除</a>
-					<a class="weui-btn weui-btn_default" href="javascript:" onclick="hideMask();">返 回</a>
+					<a class="weui-btn weui-btn_default" href="javascript:" onclick="hideMask();">返回</a>
 				</div>
 			</form>
 		</div>
@@ -272,7 +278,7 @@
 					</p>
 				</div>
 				<div class="weui-form__opr-area">
-					<a class="weui-btn weui-btn_default" href="javascript:" onclick="hideMask();">返 回</a>
+					<a class="weui-btn weui-btn_default" href="javascript:" onclick="hideMask();">返回</a>
 				</div>
 			</form>
 		</div>
@@ -541,7 +547,7 @@
 			peopleId = $('#auditPeople').val();
 			sectionId = $('#auditSection').val();
 		}
-		if (type == "") {
+		if (type == "-1") {
 			$('#daily-tips').text('请选择日报类型');
 		} else if (objId == "") {
 			$('#daily-tips').text('请选择对象类型');
@@ -575,8 +581,10 @@
 			$('#addDailyContent').append(html);
 			allDaily.push(daily);
 			console.log(allDaily);
+			$('#daily-tips').text('');
 			people = "";
 		}
+		$('#add-daily-tips').text('');
 	}
 	//	打开编辑日报项弹窗
 	function editWork(num) {
@@ -627,7 +635,7 @@
 			peopleId = $('#auditPeople').val();
 			sectionId = $('#auditSection').val();
 		}
-		if (type == "") {
+		if (type == "-1") {
 			$('#daily-tips').text('请选择日报类型');
 		} else if (objId == "") {
 			$('#daily-tips').text('请选择对象类型');
@@ -671,6 +679,7 @@
 					'</a>';
 			});
 			$('#addDailyContent').html(html);
+			$('#daily-tips').text('');
 			people = "";
 		}
 	}
@@ -786,6 +795,9 @@
 			},
 			success: function(result) {
 				console.log(result);
+				if (result.resultCode!=0){
+					delayURL('error.html', 0);
+				}
 				allDailies = result.resultData.dailies;
 				console.log(allDailies);
 				$('#userNameText').text(result.resultData.creater);
@@ -904,63 +916,70 @@
 			totalDailies.push(dailies);
 		});
 		console.log(totalDailies);
-		if (processDetailId == ""){
-			var objStr = {
-				ddUserId: getDdid,
-				createTime: getCurrentDateTime(),
-				processId: 2,
-				processType: 0,
-			};
-			$.ajax({
-				url: apiUrl + 'sendProcessDetail',
-				type: 'POST',
-				data: {
-					processDetail: JSON.stringify(objStr),
-					dailys: JSON.stringify(totalDailies)
-				},
-				success: function(result) {
-					console.log(result);
-					var $toast = $('#toast');
-					if ($toast.css('display') != 'none') return;
-					$toast.fadeIn(100);
-					delayURL('home.html', 3);
-					setTimeout(function() {
-						$toast.fadeOut(100);
-					}, 3000);
-				},
-				error: function(XMLHttpRequest, textStatus, errorThrown) {
-					console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
-				}
-			});
+		if (totalDailies.length == 0){
+			$('#add-daily-tips').text('请添加工作内容!');
+		} else {
+			if (processDetailId == ""){
+				var objStr = {
+					ddUserId: getDdid,
+					createTime: getCurrentDateTime(),
+					processId: 2,
+					processType: 0,
+				};
+				$.ajax({
+					url: apiUrl + 'sendProcessDetail',
+					type: 'POST',
+					data: {
+						processDetail: JSON.stringify(objStr),
+						dailys: JSON.stringify(totalDailies)
+					},
+					success: function(result) {
+						console.log(result);
+						var $toast = $('#toast');
+						if ($toast.css('display') != 'none') return;
+						$toast.fadeIn(100);
+						delayURL('home.html', 3);
+						setTimeout(function() {
+							$toast.fadeOut(100);
+						}, 3000);
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown) {
+						console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+					}
+				});
+			}
+			if (processDetailId != ""){
+				var objStr = {
+					ddUserId: getDdid,
+					createTime: getCurrentDateTime(),
+					processDetailId:processDetailId,
+				};
+				$.ajax({
+					url: apiUrl + 'sendProcessDetailForRe',
+					type: 'POST',
+					data: {
+						processDetail: JSON.stringify(objStr),
+						dailys: JSON.stringify(totalDailies)
+					},
+					success: function(result) {
+						console.log(result);
+						var $toast = $('#toast');
+						if ($toast.css('display') != 'none') return;
+						$toast.fadeIn(100);
+						delayURL('home.html', 3);
+						setTimeout(function() {
+							$toast.fadeOut(100);
+						}, 3000);
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown) {
+						console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+					}
+				});
+			}
+			totalDailies.splice(0);
 		}
-		if (processDetailId != ""){
-			var objStr = {
-				ddUserId: getDdid,
-				createTime: getCurrentDateTime(),
-				processDetailId:processDetailId,
-			};
-			$.ajax({
-				url: apiUrl + 'sendProcessDetailForRe',
-				type: 'POST',
-				data: {
-					processDetail: JSON.stringify(objStr),
-					dailys: JSON.stringify(totalDailies)
-				},
-				success: function(result) {
-					console.log(result);
-					var $toast = $('#toast');
-					if ($toast.css('display') != 'none') return;
-					$toast.fadeIn(100);
-					delayURL('home.html', 3);
-					setTimeout(function() {
-						$toast.fadeOut(100);
-					}, 3000);
-				},
-				error: function(XMLHttpRequest, textStatus, errorThrown) {
-					console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
-				}
-			});
-		}
-		totalDailies.splice(0);
+	}
+	function goHome() {
+		delayURL('home.html',0);
 	}
 </script>

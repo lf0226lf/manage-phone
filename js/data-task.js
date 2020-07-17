@@ -27,11 +27,18 @@ function loadMissions(type) {
 		success: function (result) {
 			if (result.resultData.length == 0) {
 				//无数据显示
+				$('.no-date').show();
 			} else {
+				$('.no-date').hide();
 				add(result, 3);
 				totalPage = result.resultPojo.pages;
 				console.log(result.resultData);
 				console.log(totalPage);
+				console.log($('.weui-panel').scrollTop());
+				$(".pullup").html("上拉加载…");
+			}
+			if (result.resultData.length < 8){
+				$(".pullup").html("加载结束");
 			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -56,11 +63,17 @@ function init(type) {
 		success: function (result) {
 			if (result.resultData.length == 0) {
 				//无数据显示
+				$('.no-date').show();
+				add(result, 1);
 			} else {
+				$('.no-date').hide();
 				add(result, 1);
 				totalPage = result.resultPojo.pages;
 				//console.log(result.resultData);
 				//console.log(totalPage);
+			}
+			if (result.resultData.length < 8){
+				$(".pullup").html("加载结束");
 			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -114,11 +127,17 @@ function refreshDate() {
 		success: function (result) {
 			if (result.resultData.length == 0) {
 				//无数据显示
+				$('.no-date').show();
 			} else {
+				$('.no-date').hide();
 				add(result, 3);
 				totalPage = result.resultPojo.pages;
 				console.log(result.resultData);
 				console.log(totalPage);
+				$(".pullup").html("上拉加载…");
+			}
+			if (result.resultData.length < 8){
+				$(".pullup").html("加载结束");
 			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -141,9 +160,11 @@ function add(result, type) {
 
 function initBox(result) {
 	var html = "";
+	var finishTime;
 	$.each(result.resultData, function (index, obj) {
+		finishTime = formatCSTDate(obj.finishTime,"yyyy-MM-dd hh:mm:ss");
 		var hurry = obj.level == "1" ? '<span class="hurry">急</span>' : '';
-		html += '<a href="javascript:" class="weui-media-box weui-media-box_appmsg" onclick="window.parent.frames.location.href = \'task-detail.html?id=' + obj.missionId + '\'">' +
+		html += '<div href="javascript:" class="weui-media-box weui-media-box_appmsg" onclick="window.parent.frames.location.href = \'task-detail.html?id=' + obj.missionId + '\'">' +
 			'<div class="weui-media-box__bd">' +
 			'<div class="task_state ' + task_state[obj.status] + '">' +
 			'</div>' +
@@ -153,10 +174,10 @@ function initBox(result) {
 			'<p class="weui-media-box__desc">' + obj.missionRemark + '</p>' +
 			'<ul class="weui-media-box__info">' +
 			'<li class="weui-media-box__info__meta">' + obj.createMan + '→' + obj.handlerMan + '</li>' +
-			'<li class="weui-media-box__info__meta">交期：' + obj.finishTime + '</li>' +
+			'<li class="weui-media-box__info__meta">交期：' + finishTime + '</li>' +
 			'</ul>' +
 			'</div>' +
-			'</a>'
+			'</div>'
 	});
 	$('#panel_1 .list').html(html);
 	loaded();
@@ -164,9 +185,11 @@ function initBox(result) {
 
 function addBox(result) {
 	var html = "";
+	var finishTime;
 	$.each(result.resultData, function (index, obj) {
+		finishTime = formatCSTDate(obj.finishTime,"yyyy-MM-dd hh:mm:ss");
 		var hurry = obj.level == "1" ? '<span class="hurry">急</span>' : '';
-		html += '<a href="javascript:" class="weui-media-box weui-media-box_appmsg" onclick="window.parent.frames.location.href = \'task-detail.html?id=' + obj.missionId + '\'">' +
+		html += '<div href="javascript:" class="weui-media-box weui-media-box_appmsg" onclick="window.parent.frames.location.href = \'task-detail.html?id=' + obj.missionId + '\'">' +
 			'<div class="weui-media-box__bd">' +
 			'<div class="task_state ' + task_state[obj.status] + '">' +
 			'</div>' +
@@ -176,19 +199,21 @@ function addBox(result) {
 			'<p class="weui-media-box__desc">' + obj.missionRemark + '</p>' +
 			'<ul class="weui-media-box__info">' +
 			'<li class="weui-media-box__info__meta">' + obj.createMan + '→' + obj.handlerMan + '</li>' +
-			'<li class="weui-media-box__info__meta">交期：' + obj.finishTime + '</li>' +
+			'<li class="weui-media-box__info__meta">交期：' + finishTime + '</li>' +
 			'</ul>' +
 			'</div>' +
-			'</a>'
+			'</div>'
 	});
 	$('#panel_1 .list').append(html);
 }
 
 function refreshBox(result) {
 	var html = "";
+	var finishTime;
 	$.each(result.resultData, function (index, obj) {
+		finishTime = formatCSTDate(obj.finishTime,"yyyy-MM-dd hh:mm:ss");
 		var hurry = obj.level == "1" ? '<span class="hurry">急</span>' : '';
-		html += '<a href="javascript:" class="weui-media-box weui-media-box_appmsg" onclick="window.parent.frames.location.href = \'task-detail.html?id=' + obj.missionId + '\'">' +
+		html += '<div href="javascript:" class="weui-media-box weui-media-box_appmsg" onclick="window.parent.frames.location.href = \'task-detail.html?id=' + obj.missionId + '\'">' +
 			'<div class="weui-media-box__bd">' +
 			'<div class="task_state ' + task_state[obj.status] + '">' +
 			'</div>' +
@@ -198,10 +223,10 @@ function refreshBox(result) {
 			'<p class="weui-media-box__desc">' + obj.missionRemark + '</p>' +
 			'<ul class="weui-media-box__info">' +
 			'<li class="weui-media-box__info__meta">' + obj.createMan + '→' + obj.handlerMan + '</li>' +
-			'<li class="weui-media-box__info__meta">交期：' + obj.finishTime + '</li>' +
+			'<li class="weui-media-box__info__meta">交期：' + finishTime + '</li>' +
 			'</ul>' +
 			'</div>' +
-			'</a>'
+			'</div>'
 	});
 	$('#panel_1 .list').html(html);
 }

@@ -4,10 +4,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
-	<title>首页</title>
+	<title>任务</title>
 	<link rel="stylesheet" href="css/weui.css">
 	<link rel="stylesheet" href="css/common.css">
-	<link rel="stylesheet" href="//at.alicdn.com/t/font_1850030_8mjq6fkswqc.css">
+	<link rel="stylesheet" href="css/iconfont.css">
 	<link rel="stylesheet" href="css/manage.css">
 </head>
 
@@ -56,9 +56,14 @@
 						</div>
 					</div>
 				</div>
+				<div class="weui-form__tips-area">
+					<p class="weui-form__tips" id="task-tips">
+						<!--                        表单页提示，居中对齐-->
+					</p>
+				</div>
 				<div class="weui-form__opr-area">
 					<a class="weui-btn weui-btn_primary" href="javascript:" onclick="fromSubmit()">确定</a>
-					<a class="weui-btn weui-btn_default" href="javascript:" onclick="goBack();">返 回</a>
+					<a class="weui-btn weui-btn_default" href="javascript:" onclick="goBack();">返回</a>
 				</div>
 			</div>
 		</div>
@@ -89,6 +94,9 @@
 				missionId: getId.id
 			},
 			success: function (result) {
+				if (result.resultCode!=0){
+					delayURL('error.html', 0);
+				}
 				$('#missionName').val(result.resultData.missionName);
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -101,12 +109,12 @@
 		var actualDaily= $('#actualDaily').val();
 		var actualFinishTime= $('#actualFinishTime').val();
 		var finishRemark= $('#finishRemark').val();
-		if (actualDaily == ""){
-			
-		}else if(actualFinishTime == ""){
-			
+		if(actualFinishTime == ""){
+			$('#task-tips').text('请选择实际完成时间');
+		}else if (actualDaily == ""){
+			$('#task-tips').text('请填写实际工时');
 		}else if(finishRemark == ""){
-			
+			$('#task-tips').text('请填写完成描述');
 		}else{
 			mark =true;
 		}
@@ -125,7 +133,8 @@
 					var $toast = $('#toast');
 					if ($toast.css('display') != 'none') return;
 					$toast.fadeIn(100);
-					delayURL('task-detail.html?id='+getId.id ,3);
+					//delayURL('task-detail.html?id='+getId.id ,3);
+					delayURL('home.html',3);
 					setTimeout(function() {
 						$toast.fadeOut(100);
 					}, 3000);

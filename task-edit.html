@@ -125,45 +125,16 @@
 			<p class="weui-toast__content">操作成功!</p>
 		</div>
 	</div>
-</body>
-
-</html>
+</body></html>
 
 <script src="js/jQuery-2.2.0.min.js"></script>
 <script src="js/util.js"></script>
 <script src="js/cookie.js"></script>
 <script src="js/common.js"></script>
 <script>
-	$.ajax({
-		url: apiUrl + 'queryUserList',
-		type: 'GET',
-		success: function(result) {
-			console.log(result);
-			var html = '<option value="-1">---请选择---</option>';
-			$.each(result.resultData, function(index, obj) {
-				html += '<option value="' + obj.userId + '">' + obj.userName + '</option>';
-			});
-			$('#select_user').html(html);
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
-		}
-	});
-	$.ajax({
-		url: apiUrl + 'queryProjectList',
-		type: 'GET',
-		success: function(result) {
-			console.log(result);
-			var html = '<option value="-1">---请选择---</option>';
-			$.each(result.resultData, function(index, obj) {
-				html += '<option value="' + obj.projectId + '">' + obj.projectName + '</option>';
-			});
-			$('#select_project').html(html);
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
-		}
-	});
+	var getId = GetRequest();
+	var missionId;
+	init();
 	$('#select_task_type').change(function() {
 		var change = $('#select_task_type option:selected').val();
 		console.log(change);
@@ -173,7 +144,74 @@
 			$('#select_project_box').hide();
 		}
 	});
-
+	function init(){
+		$.ajax({
+			url: apiUrl + 'queryUserList',
+			type: 'GET',
+			success: function(result) {
+				console.log(result);
+				var html = '<option value="-1">---请选择---</option>';
+				$.each(result.resultData, function(index, obj) {
+					html += '<option value="' + obj.userId + '">' + obj.userName + '</option>';
+				});
+				$('#select_user').html(html);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+			}
+		});
+		$.ajax({
+			url: apiUrl + 'queryProjectList',
+			type: 'GET',
+			success: function(result) {
+				console.log(result);
+				var html = '<option value="-1">---请选择---</option>';
+				$.each(result.resultData, function(index, obj) {
+					html += '<option value="' + obj.projectId + '">' + obj.projectName + '</option>';
+				});
+				$('#select_project').html(html);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+			}
+		});
+		setTimeout(function(){
+			$.ajax({
+			url: apiUrl + 'queryMission',
+			type: 'GET',
+			data: {
+				missionId: getId.id
+			},
+			success: function (result) {
+				console.log(result);
+				if (result.resultCode!=0){
+					delayURL('error.html', 0);
+				}
+				missionId = result.resultData.missionId;
+				console.log(missionId);
+				var createTime = (result.resultData.createTime).replace(/ /, 'T');
+				console.log(createTime);
+				var finishTime = (result.resultData.finishTime).replace(/ /, 'T');
+				console.log(finishTime);
+				$('#createTime').val(createTime);
+				$('#select_user').val(result.resultData.handlerId);
+				$('#select_task_type').val(result.resultData.type);
+				if (result.resultData.type == '0' || result.resultData.type == '1'){
+					$('#select_project_box').show();
+					$('#select_project').val(result.resultData.projectId);
+				}
+				$('#finishTime').val(finishTime);
+				$('#level').val(result.resultData.level);
+				$('#hopeDaily').val(result.resultData.hopeDaily);
+				$('#missionName').val(result.resultData.missionName);
+				$('#missionRemark').val(result.resultData.missionRemark);
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+			}
+		});
+		},100);
+	}
 	function formSubmit() {
 		var mark = false;
 		var createTime = $('#createTime').val();
@@ -207,9 +245,10 @@
 		}
 		if (mark) {
 			$.ajax({
-				url: apiUrl + 'addMission',
+				url: apiUrl + 'updateMission',
 				type: 'POST',
 				data: {
+					missionId : missionId,
 					createTime: createTime,
 					handlerId: handlerId,
 					type: type,

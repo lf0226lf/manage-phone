@@ -4,10 +4,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
-	<title>首页</title>
+	<title>任务</title>
 	<link rel="stylesheet" href="css/weui.css">
 	<link rel="stylesheet" href="css/common.css">
-	<link rel="stylesheet" href="//at.alicdn.com/t/font_1850030_8mjq6fkswqc.css">
+	<link rel="stylesheet" href="css/iconfont.css">
 	<link rel="stylesheet" href="css/manage.css">
 </head>
 
@@ -54,7 +54,7 @@
 				</div>
 				<div class="weui-form__opr-area">
 					<a class="weui-btn weui-btn_primary" href="javascript:" onclick="fromSubmit()">确定</a>
-					<a class="weui-btn weui-btn_default" href="javascript:" id="showTooltips" onclick="goBack();">返 回</a>
+					<a class="weui-btn weui-btn_default" href="javascript:" id="showTooltips" onclick="goBack();">返回</a>
 				</div>
 			</div>
 		</div>
@@ -89,10 +89,14 @@
 				missionId: getId.id
 			},
 			success: function (result) {
+				if (result.resultCode!=0){
+					delayURL('error.html', 0);
+				}
 				$('#missionName').val(result.resultData.missionName);
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrown) {
 				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+				
 			}
 		});
 	}
@@ -109,10 +113,14 @@
 			},
 			success: function (result) {
 				console.log(result);
+				if (result.resultCode!=0){
+					delayURL('error.html', 0);
+				}
 				var $toast = $('#toast');
 				if ($toast.css('display') != 'none') return;
 				$toast.fadeIn(100);
-				delayURL('task-detail.html?id='+getId.id ,3);
+				//delayURL('task-detail.html?id='+getId.id ,3);
+				delayURL('home.html',3);
 				setTimeout(function() {
 					$toast.fadeOut(100);
 				}, 3000);

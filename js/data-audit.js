@@ -29,11 +29,17 @@ function init() {
 		success: function (result) {
 			if (result.resultData.length == 0) {
 				//无数据显示
+				$('.no-date').show();
 			} else {
 				add(result, 1);
+				$('.no-date').hide();
 				totalPage = result.resultPojo.pages;
 				//console.log(result.resultData);
 				//console.log(totalPage);
+				console.log($('.weui-panel').scrollTop());
+			}
+			if (result.resultData.length < 8){
+				$(".pullup").html("加载结束");
 			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -91,8 +97,13 @@ function refreshDate() {
 		success: function (result) {
 			if (result.resultData.length == 0) {
 				//无数据显示
+				$('.no-date').show();
 			} else {
+				$('.no-date').hide();
 				add(result, 3);
+			}
+			if (result.resultData.length < 8){
+				$(".pullup").html("加载结束");
 			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -117,7 +128,7 @@ function add(result, type) {
 function initBox(result) {
 	var html = "";
 	$.each(result.resultData, function (index, obj) {
-		html += '<a href="javascript:" class="weui-media-box weui-media-box_appmsg item" onclick="window.parent.frames.location.href = \'daily-detail-audit.html?id=' + obj.taskId + '\'">' +
+		html += '<div href="javascript:" class="weui-media-box weui-media-box_appmsg item" onclick="window.parent.frames.location.href = \'daily-detail-audit.html?id=' + obj.taskId + '\'">' +
 			'<div class="weui-media-box__bd">' +
 			'<h4 class="weui-media-box__title">' + process_type[obj.processType] +
 			//			'<small>' + obj.hours + '人/日</small></h4>' +
@@ -127,7 +138,7 @@ function initBox(result) {
 			'<li class="weui-media-box__info__meta">' + obj.createTime + '</li>' +
 			'</ul>' +
 			'</div>' +
-			'</a>';
+			'</div>';
 	});
 	$('#panel_1 .list').html(html);
 	loaded();
@@ -136,7 +147,7 @@ function initBox(result) {
 function addBox(result) {
 	var html = "";
 	$.each(result.resultData, function (index, obj) {
-		html += '<a href="javascript:" class="weui-media-box weui-media-box_appmsg item" onclick="window.parent.frames.location.href = \'daily-detail-audit.html?id=' + obj.taskId + '\'">' +
+		html += '<div href="javascript:" class="weui-media-box weui-media-box_appmsg item" onclick="window.parent.frames.location.href = \'daily-detail-audit.html?id=' + obj.taskId + '\'">' +
 			'<div class="weui-media-box__bd">' +
 			'<h4 class="weui-media-box__title">' + process_type[obj.processType] +
 			//			'<small>' + obj.hours + '人/日</small></h4>' +
@@ -146,7 +157,7 @@ function addBox(result) {
 			'<li class="weui-media-box__info__meta">' + obj.createTime + '</li>' +
 			'</ul>' +
 			'</div>' +
-			'</a>';
+			'</div>';
 	});
 	$('#panel_1 .list').append(html);
 }
@@ -154,7 +165,7 @@ function addBox(result) {
 function refreshBox(result) {
 	var html = "";
 	$.each(result.resultData, function (index, obj) {
-		html += '<a href="javascript:" class="weui-media-box weui-media-box_appmsg item" onclick="window.parent.frames.location.href = \'daily-detail-audit.html?id=' + obj.taskId + '\'">' +
+		html += '<div href="javascript:" class="weui-media-box weui-media-box_appmsg item" onclick="window.parent.frames.location.href = \'daily-detail-audit.html?id=' + obj.taskId + '\'">' +
 			'<div class="weui-media-box__bd">' +
 			'<h4 class="weui-media-box__title">' + process_type[obj.processType] +
 			//			'<small>' + obj.hours + '人/日</small></h4>' +
@@ -164,7 +175,7 @@ function refreshBox(result) {
 			'<li class="weui-media-box__info__meta">' + obj.createTime + '</li>' +
 			'</ul>' +
 			'</div>' +
-			'</a>';
+			'</div>';
 	});
 	$('#panel_1 .list').html(html);
 }

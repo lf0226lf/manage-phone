@@ -7,7 +7,7 @@
 	<title>首页</title>
 	<link rel="stylesheet" href="css/weui.css">
 	<link rel="stylesheet" href="css/common.css">
-	<link rel="stylesheet" href="//at.alicdn.com/t/font_1850030_8mjq6fkswqc.css">
+	<link rel="stylesheet" href="css/iconfont.css">
 	<link rel="stylesheet" href="css/manage.css">
 </head>
 
@@ -28,26 +28,26 @@
 						</div>
 					</div>
 					<div class="weui-tab__panel">
-						<iframe id="home_tab_1" class="home_tab" src="home-audit.html" width="100%" height="100%" frameborder="0"></iframe>
-						<iframe id="home_tab_2" class="home_tab" src="home-task.html" width="100%" height="100%" frameborder="0" style="display: none;"></iframe>
-						<iframe id="home_tab_3" class="home_tab" src="home-daily.html" width="100%" height="100%" frameborder="0" style="display: none;"></iframe>
+						<iframe id="home_tab_1" class="home_tab" width="100%" height="100%" frameborder="0"></iframe>
+						<iframe id="home_tab_2" class="home_tab" width="100%" height="100%" frameborder="0" style="display: none;"></iframe>
+						<iframe id="home_tab_3" class="home_tab" width="100%" height="100%" frameborder="0" style="display: none;"></iframe>
 					</div>
 					<div class="weui-tabbar">
-						<div class="weui-tabbar__item weui-bar__item_on" onclick="switchTabbar(1);">
+						<div id="home_tabbar_1" class="weui-tabbar__item weui-bar__item_on" onclick="switchTabbar(1);">
 							<div class="inline-block">
 								<span class="iconfont icon-shenpi"></span>
 								<!--								<span class="weui-badge" style="position: absolute; top: -2px; right: -13px;">8</span>-->
 							</div>
 							<p class="weui-tabbar__label">首页</p>
 						</div>
-						<div class="weui-tabbar__item" onclick="switchTabbar(2);">
+						<div id="home_tabbar_2" class="weui-tabbar__item" onclick="switchTabbar(2);">
 							<div class="inline-block">
 								<span class="iconfont icon-renwu"></span>
 								<!--								<span class="weui-badge weui-badge_dot" style="position: absolute; top: 0; right: -6px;"></span>-->
 							</div>
 							<p class="weui-tabbar__label">任务</p>
 						</div>
-						<div class="weui-tabbar__item" onclick="switchTabbar(3);">
+						<div id="home_tabbar_3" class="weui-tabbar__item" onclick="switchTabbar(3);">
 							<div class="inline-block">
 								<span class="iconfont icon-baogaogongdan"></span>
 							</div>
@@ -73,6 +73,9 @@
 <script src="js/pullscroll.js"></script>
 -->
 <script>
+	$("#home_tab_1").attr("src","home-audit.html");
+	$("#home_tab_2").attr("src","home-task.html");
+	$("#home_tab_3").attr("src","home-daily.html");
 	function switchTabbar(tab) {
 		$('.home_tab').hide();
 		$('#home_tab_' + tab).show();

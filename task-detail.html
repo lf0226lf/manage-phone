@@ -4,10 +4,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
-	<title>首页</title>
+	<title>任务</title>
 	<link rel="stylesheet" href="css/weui.css">
 	<link rel="stylesheet" href="css/common.css">
-	<link rel="stylesheet" href="//at.alicdn.com/t/font_1850030_8mjq6fkswqc.css">
+	<link rel="stylesheet" href="css/iconfont.css">
 	<link rel="stylesheet" href="css/manage.css">
 </head>
 
@@ -38,11 +38,17 @@
 						</div>
 						<div class="weui-cell__ft" id="type">商机</div>
 					</div>
-					<div class="weui-cell ">
+					<div class="weui-cell" id="projectNameBox" style="display: none;">
 						<div class="weui-cell__bd">
 							<p>任务关联</p>
 						</div>
 						<div class="weui-cell__ft" id="projectName">指挥镇江抽奖平台</div>
+					</div>
+					<div class="weui-cell ">
+						<div class="weui-cell__bd">
+							<p>要求完成时间</p>
+						</div>
+						<div class="weui-cell__ft" id="finishTime">2020-05-13</div>
 					</div>
 					<div class="weui-cell ">
 						<div class="weui-cell__bd">
@@ -56,7 +62,7 @@
 						</div>
 						<div class="weui-cell__ft"><span id="hopeDaily">2</span>人/日</div>
 					</div>
-					<div class="weui-cell ">
+					<div class="weui-cell">
 						<div class="weui-cell__bd">
 							<p>任务标题</p>
 						</div>
@@ -125,11 +131,33 @@
 				<div class="weui-btn-area">
 					<a href="javascript:" class="weui-btn weui-btn_primary" id="submitMission" onclick="submitMission()" style="display: none;">提交</a>
 					<a href="javascript:" class="weui-btn weui-btn_primary" id="auditMission" onclick="auditMission()" style="display: none;">审核</a>
-					<a class="weui-btn weui-btn_default" href="javascript:" onclick="goBack();">返 回</a>
+					<a href="javascript:" class="weui-btn weui-btn_primary" id="editMission" onclick="editMission()" style="display: none;">编辑</a>
+					<a href="javascript:" class="weui-btn weui-btn_warn" id="delMission" style="display: none;">删除</a>
+					<a class="weui-btn weui-btn_default" href="javascript:" onclick="goBack();">返回</a>
 				</div>
 			</div>
 			<div class="page__ft">
 			</div>
+		</div>
+	</div>
+	<div id="dialogs">
+		<div class="js_dialog" id="passDialog" style="display: none;">
+			<div class="weui-mask"></div>
+			<div class="weui-dialog">
+				<div class="weui-dialog__hd"><strong class="weui-dialog__title">提示</strong></div>
+				<div class="weui-dialog__bd">确定删除任务吗？</div>
+				<div class="weui-dialog__ft">
+					<a href="javascript:" class="weui-dialog__btn weui-dialog__btn_default">返回</a>
+					<a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary" onclick="confirmDel();">确定</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="toast" style="display: none;">
+		<div class="weui-mask_transparent"></div>
+		<div class="weui-toast">
+			<i class="weui-icon-success-no-circle weui-icon_toast"></i>
+			<p class="weui-toast__content">操作成功!</p>
 		</div>
 	</div>
 </body></html>
@@ -140,8 +168,9 @@
 <script src="js/common.js"></script>
 <script>
 	var getId = GetRequest();
+	var mark;
 	//console.log(getId);
-	var level ={
+	var level = {
 		"0": "一般",
 		"1": "紧急"
 	};
@@ -151,13 +180,20 @@
 		"2": "行政",
 		"3": "其他"
 	};
-	var missionStatus ={
+	var missionStatus = {
 		"0": "未提交",
 		"1": "已提交",
 		"2": "已完成",
 		"3": "退回"
 	};
 	init();
+	$('#delMission').on('click', function() {
+		$('#passDialog').fadeIn(200);
+	});
+	$('#dialogs').on('click', '.weui-dialog__btn', function() {
+		$(this).parents('.js_dialog').fadeOut(200);
+	});
+
 	function init() {
 		$.ajax({
 			url: apiUrl + 'queryMission',
@@ -165,13 +201,20 @@
 			data: {
 				missionId: getId.id
 			},
-			success: function (result) {
+			success: function(result) {
 				console.log(result);
+				if (result.resultCode!=0){
+					delayURL('error.html', 0);
+				}
 				$('#createTime').text(result.resultData.createTime);
 				$('#handlerMan').text(result.resultData.handlerMan);
 				$('#handlerMan').text(result.resultData.handlerMan);
 				$('#type').text(type[result.resultData.type]);
-				$('#projectName').text(result.resultData.projectName);
+				$('#finishTime').text(result.resultData.finishTime);
+				if (result.resultData.type == '0' || result.resultData.type == '1') {
+					$('#projectNameBox').show();
+					$('#projectName').text(result.resultData.projectName);
+				}
 				$('#level').text(level[result.resultData.level]);
 				$('#hopeDaily').text(result.resultData.hopeDaily);
 				$('#missionName').text(result.resultData.missionName);
@@ -180,86 +223,163 @@
 				$('#actualFinishTime').text(result.resultData.actualFinishTime);
 				$('#actualDaily').text(result.resultData.actualDaily);
 				$('#finishRemark').text(result.resultData.finishRemark);
-				if (getDdid == result.resultData.createId){
-					if (result.resultData.status == 0){
+				console.log(getDdid);
+				console.log(result.resultData.createId);
+				console.log(result.resultData.handlerId);
+				$.ajax({
+					url: apiUrl + 'checkTheSame',
+					type: 'GET',
+					async: false,
+					data: {
+						createId: result.resultData.createId,
+						ddUserId: getDdid
+					},
+					success: function(result) {
+						mark = result.resultData;
+						console.log(mark);
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown) {
+						console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+					}
+				});
+				if (mark) {
+					if (result.resultData.status == 0) {
 						$('#finishInfo').hide()
 						$('#submitMission').hide();
 						$('#auditMission').hide();
+						$('#editMission').show();
+						$('#delMission').show();
 					}
-					if (result.resultData.status == 1){
+					if (result.resultData.status == 1) {
 						$('#finishInfo').show()
 						$('#submitMission').hide();
 						$('#auditMission').show();
+						$('#editMission').hide();
+						$('#delMission').hide();
 					}
-					if (result.resultData.status == 2){
+					if (result.resultData.status == 2) {
 						$('#finishInfo').show()
 						$('#submitMission').hide();
 						$('#auditMission').hide();
+						$('#editMission').hide();
+						$('#delMission').hide();
 					}
-					if (result.resultData.status == 3){
+					if (result.resultData.status == 3) {
 						$('#finishInfo').show()
 						$('#submitMission').hide();
 						$('#auditMission').hide();
+						$('#editMission').hide();
+						$('#delMission').hide();
 					}
-				}
-				if (getDdid == result.resultData.handlerId){
-					if (result.resultData.status == 0){
+				}else{
+					if (result.resultData.status == 0) {
 						$('#finishInfo').hide()
 						$('#submitMission').show();
 						$('#auditMission').hide();
+						$('#editMission').hide();
+						$('#delMission').hide();
 					}
-					if (result.resultData.status == 1){
+					if (result.resultData.status == 1) {
 						$('#finishInfo').show()
 						$('#submitMission').hide();
 						$('#auditMission').hide();
+						$('#editMission').hide();
+						$('#delMission').hide();
 					}
-					if (result.resultData.status == 2){
+					if (result.resultData.status == 2) {
 						$('#finishInfo').show()
 						$('#submitMission').hide();
 						$('#auditMission').hide();
+						$('#editMission').hide();
+						$('#delMission').hide();
 					}
-					if (result.resultData.status == 3){
+					if (result.resultData.status == 3) {
 						$('#finishInfo').show()
 						$('#submitMission').show();
 						$('#auditMission').hide();
+						$('#editMission').hide();
+						$('#delMission').hide();
 					}
 				}
-				if (result.resultData.createId == result.resultData.handlerId){
-					if (result.resultData.status == 0){
+				if (result.resultData.createId == result.resultData.handlerId) {
+					if (result.resultData.status == 0) {
 						$('#finishInfo').hide()
 						$('#submitMission').show();
 						$('#auditMission').hide();
+						$('#editMission').show();
+						$('#delMission').show();
 					}
-					if (result.resultData.status == 1){
+					if (result.resultData.status == 1) {
 						$('#finishInfo').show()
 						$('#submitMission').hide();
 						$('#auditMission').show();
+						$('#editMission').hide();
+						$('#delMission').hide();
 					}
-					if (result.resultData.status == 2){
+					if (result.resultData.status == 2) {
 						$('#finishInfo').show()
 						$('#submitMission').hide();
 						$('#auditMission').hide();
+						$('#editMission').hide();
+						$('#delMission').hide();
 					}
-					if (result.resultData.status == 3){
+					if (result.resultData.status == 3) {
 						$('#finishInfo').show()
 						$('#submitMission').show();
 						$('#auditMission').hide();
+						$('#editMission').hide();
+						$('#delMission').hide();
 					}
 				}
 			},
-			error: function (XMLHttpRequest, textStatus, errorThrown) {
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
 				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
 			}
 		});
 	}
-	function submitMission(){
-		var id= getId.id;
-		var url= "task-submit.html?id=" + id;
+
+	function submitMission() {
+		var id = getId.id;
+		var url = "task-submit.html?id=" + id;
 		window.location.href = url;
 	}
-	function auditMission(){
-		var id= getId.id;
-		var url= "task-audit.html?id=" + id;
+
+	function auditMission() {
+		var id = getId.id;
+		var url = "task-audit.html?id=" + id;
 		window.location.href = url;
+	}
+
+	function editMission() {
+		var id = getId.id;
+		var url = "task-edit.html?id=" + id;
+		window.location.href = url;
+	}
+
+	function confirmDel() {
+		$.ajax({
+			url: apiUrl + 'delMission',
+			type: 'POST',
+			data: {
+				missionId: getId.id
+			},
+			success: function(result) {
+				console.log(result);
+				var $toast = $('#toast');
+				if ($toast.css('display') != 'none') return;
+				$toast.fadeIn(100);
+				delayURL('home.html', 3);
+				setTimeout(function() {
+					$toast.fadeOut(100);
+				}, 3000);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+			}
+		});
+	}
+
+	function goHome() {
+		delayURL('home.html',0);
 	}
 </script>

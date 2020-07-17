@@ -4,10 +4,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
-	<title>首页</title>
+	<title>审批</title>
 	<link rel="stylesheet" href="css/weui.css">
 	<link rel="stylesheet" href="css/common.css">
-	<link rel="stylesheet" href="//at.alicdn.com/t/font_1850030_8mjq6fkswqc.css">
+	<link rel="stylesheet" href="css/iconfont.css">
 	<link rel="stylesheet" href="css/manage.css">
 </head>
 
@@ -17,7 +17,7 @@
 			<div class="page__bd">
 				<div class="weui-cells__title">基本信息</div>
 				<div class="weui-cells">
-<!--
+					<!--
 					<div class="weui-cell ">
 						<div class="weui-cell__bd">
 							<p>发起日期</p>
@@ -79,12 +79,12 @@
 					<div class="weui-flex">
 						<div class="weui-flex__item">
 							<div class="p-x-sm">
-								<a href="javascript:" class="weui-btn weui-btn_default" style="width: auto;" id="refuse">驳 回</a>
+								<a href="javascript:" class="weui-btn weui-btn_default" style="width: auto;" id="refuse">驳回</a>
 							</div>
 						</div>
 						<div class="weui-flex__item">
 							<div class="p-x-sm">
-								<a href="javascript:" class="weui-btn weui-btn_primary" style="width: auto;" id="pass">通 过</a>
+								<a href="javascript:" class="weui-btn weui-btn_primary" style="width: auto;" id="pass">通过</a>
 							</div>
 						</div>
 					</div>
@@ -112,7 +112,7 @@
 						</div>
 						<div class="weui-cell__ft" id="alertType"></div>
 					</div>
-					<div class="weui-cell ">
+					<div class="weui-cell" id="alertProjectNameBox">
 						<div class="weui-cell__bd">
 							<p>任务关联</p>
 						</div>
@@ -188,6 +188,9 @@
 		},
 		success: function(result) {
 			console.log(result);
+			if (result.resultCode!=0){
+				delayURL('error.html', 0);
+			}
 			$('#creater').text(result.resultData.creater);
 			//$('#beginTime').text(result.resultData.beginTime);
 			$('#createTime').text(result.resultData.createTime);
@@ -201,7 +204,8 @@
 			}
 			if (type == '0' || type == '1') {
 				$('#projectName').text(result.resultData.projectName);
-			} else {
+			} 
+			if (type == '2' || type == '3') {
 				$('#projectName').text(typeName[result.resultData.type]);
 			};
 			$('#dailyTime').text(result.resultData.dailyTime);
@@ -227,6 +231,10 @@
 					"2": "其他",
 					"3": "行政",
 					"4": "企管"
+				}
+				var type = result.resultData.type;
+				if (type == '2' || type == '3'){
+					$('#alertProjectNameBox').hide();
 				}
 				$('#alertType').text(typeName[result.resultData.type]);
 				$('#alertProjectName').text(result.resultData.projectName);

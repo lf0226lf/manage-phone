@@ -4,10 +4,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
-	<title>首页</title>
+	<title></title>
 	<link rel="stylesheet" href="css/weui.css">
 	<link rel="stylesheet" href="css/common.css">
-	<link rel="stylesheet" href="//at.alicdn.com/t/font_1850030_8mjq6fkswqc.css">
+	<link rel="stylesheet" href="css/iconfont.css">
 	<link rel="stylesheet" href="css/manage.css">
 </head>
 
@@ -53,7 +53,7 @@
 					</p>
 				</div>
 				<div class="weui-form__opr-area">
-					<a class="weui-btn weui-btn_primary" href="javascript:" id="login">登 录</a>
+					<a class="weui-btn weui-btn_primary" href="javascript:" id="loginBtn">登录</a>
 				</div>
 				<div class="weui-form__extra-area">
 					<div class="weui-footer">
@@ -73,67 +73,80 @@
 
 
 <script src="js/jQuery-2.2.0.min.js"></script>
+<script src="js/util.js"></script>
 <script src="js/weui.min.js"></script>
-<script src="https://g.alicdn.com/dingding/dingtalk-jsapi/2.7.13/dingtalk.open.js"></script>
 <script src="js/cookie.js"></script>
-<script src="js/common.js"></script>
+<script src="js/dingtalk.open.js"></script>
+<!--<script src="js/ddid.js"></script>-->
 <script>
-//$(function () {
-//		dd.runtime.permission.requestAuthCode({
-//			corpId: corpId,
-//			onSuccess: function (result) {
-//				var code = result.code;
-//				$.ajax({
-//					type: "GET",
-//					url: 'http://139.224.229.86/templete/phone/phoneDdLogin?code=' + code,
-//					//                async: false,
-//					//                data: {
-//					//                    code: code
-//					//                },
-//					success: function (data) {
-//						if (data.resultCode == '0') {
-//							window.location.href = 'toMain';
-//						} else {
-//							$("#ddUserId").val(data.resultData);
-//						}
-//					}
-//				});
-//			},
-//			onFail: function (err) {
-//	
-//			}
-//		})
-//}
-$('#login').click(function () {
-	var userName = $("#userName").val(); //取前台用户名的值  
-	var password = $("#password").val(); //取前台密码的值
-	if (userName == "" && password == "") {
-		$('#login-tips').html('用户名或密码不能为空');
-	} else {
-		$.ajax({
-			url: apiUrl+'phoneLogin',
-			type: 'POST',
-			data: {
-				userLoginName: userName,
-				userPwd: password
-			},
-			success: function (result) {
-				console.log(result);
-				if (result.resultCode != '0') {
-					$('#login-tips').html(result.resultMsg);
-//					$('#topTips').html(result.resultMsg).fadeIn(200).delay(1500).fadeOut(200);
-				} else {
-					setCookie('ddid', '430728581003950', 0.02083, '/');
-					//				var x = document.cookie;
-					//				console.log(x);
-					$(window).attr('location', 'home.html');
+	var apiUrl = 'http://139.224.229.86/templete/phone/';
+	//	var ddid='0331430927690630';
+	var ddid;
+	var corpId = 'dingcb2c55db9b29c67d35c2f4657eb6378f';
+	dd.runtime.permission.requestAuthCode({
+		corpId: corpId,
+		onSuccess: function (result) {
+			var code = result.code;
+			$.ajax({
+				type: "GET",
+				url: 'http://139.224.229.86/templete/phone/phoneDdLogin?code=' + code,
+				async: true,
+				//                data: {
+				//                    code: code
+				//                },
+				success: function (data) {
+					console.log(data);
+					if (data.resultCode == '0') {
+						ddid = data.resultData;
+						setCookie('ddid', ddid, 0.02083, '/');
+						$(window).attr('location', 'home.html');
+					} else {
+						ddid = data.resultData;
+					}
 				}
-			},
-			error: function (XMLHttpRequest, textStatus, errorThrown) {
-				console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
-			}
-		});
-	}
-});
+			});
+		},
+		onFail: function (err) {
+
+		}
+	})
+
+	$('#loginBtn').click(function () {
+		var userName = $("#userName").val(); //取前台用户名的值  
+		var password = $("#password").val(); //取前台密码的值
+		if (userName == "" || password == "") {
+			$('#login-tips').html('用户名或密码不能为空');
+		} else {
+			$('#login-tips').html('');
+			$.ajax({
+				url: apiUrl+'phoneLogin',
+				type: 'POST',
+				data: {
+					userLoginName: userName,
+					userPwd: password,
+					ddUserId: ddid
+				},
+				success: function (result) {
+					console.log(result);
+					if (result.resultCode != '0') {
+						$('#login-tips').html(result.resultMsg);
+					} else {
+						$('#loginBtn').html('<i class="weui-loading"></i>登录中');
+						//				var x = document.cookie;
+						//				console.log(x);
+						ddid = result.resultData;
+						setCookie('ddid', ddid, 0.02083, '/');
+						setTimeout(function(){
+							$(window).attr('location', 'home.html');
+							$('#loginBtn').html('登录');
+						},1500);
+					}
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+				}
+			});
+		}
+	});
 	
 </script>
